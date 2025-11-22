@@ -1,0 +1,752 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All Orders - Emily Bakes Cakes</title>
+    <link rel="stylesheet" href="css/dashboard-redesigned.css">
+    <style>
+        .filters-bar {
+            background: var(--bg-white);
+            padding: 16px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 12px;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--border-light);
+        }
+
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .filter-group label {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .filter-group select,
+        .filter-group input {
+            padding: 8px 12px;
+            border: 1px solid var(--border-light);
+            border-radius: 6px;
+            font-size: 13px;
+        }
+
+        .filter-group select:focus,
+        .filter-group input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(196, 69, 105, 0.1);
+        }
+
+        .orders-table-container {
+            background: var(--bg-white);
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--border-light);
+        }
+
+        .orders-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .orders-table thead {
+            background: var(--bg-light);
+            border-bottom: 2px solid var(--border-light);
+        }
+
+        .orders-table th {
+            padding: 12px 14px;
+            text-align: left;
+            font-weight: 600;
+            font-size: 11px;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .orders-table tbody tr {
+            border-bottom: 1px solid var(--border-light);
+            transition: var(--transition-fast);
+        }
+
+        .orders-table tbody tr:hover {
+            background: var(--bg-light);
+        }
+
+        .orders-table td {
+            padding: 12px 14px;
+            font-size: 13px;
+            color: var(--text-primary);
+        }
+
+        .order-id {
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        .customer-name {
+            font-weight: 500;
+        }
+
+        .order-date {
+            color: var(--text-secondary);
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 10px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .status-pending {
+            background: rgba(245, 158, 11, 0.1);
+            color: var(--warning);
+        }
+
+        .status-confirmed {
+            background: rgba(59, 130, 246, 0.1);
+            color: var(--info);
+        }
+
+        .status-completed {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--success);
+        }
+
+        .status-cancelled {
+            background: rgba(239, 68, 68, 0.1);
+            color: var(--danger);
+        }
+
+        .amount {
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 8px;
+        }
+
+        .btn-sm {
+            padding: 6px 10px;
+            border: none;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition-fast);
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-view {
+            background: var(--info);
+            color: white;
+        }
+
+        .btn-view:hover {
+            background: #2563eb;
+            transform: translateY(-1px);
+        }
+
+        .btn-edit {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-edit:hover {
+            background: var(--primary-dark);
+            transform: translateY(-1px);
+        }
+
+        .btn-delete {
+            background: var(--danger);
+            color: white;
+        }
+
+        .btn-delete:hover {
+            background: #dc2626;
+            transform: translateY(-1px);
+        }
+
+        .empty-state {
+            padding: 60px 20px;
+            text-align: center;
+            color: var(--text-secondary);
+        }
+
+        .empty-state-icon {
+            font-size: 48px;
+            margin-bottom: 16px;
+        }
+
+        .pagination {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 20px;
+            padding: 16px;
+        }
+
+        .pagination button,
+        .pagination a {
+            padding: 8px 12px;
+            border: 1px solid var(--border-light);
+            border-radius: 6px;
+            background: var(--bg-white);
+            cursor: pointer;
+            font-size: 12px;
+            transition: var(--transition-fast);
+        }
+
+        .pagination button:hover,
+        .pagination a:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        .pagination .active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: var(--bg-white);
+            border-radius: 8px;
+            padding: 32px;
+            max-width: 600px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 20px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .modal-header {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: var(--text-secondary);
+        }
+
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            font-size: 12px;
+            color: var(--text-primary);
+            margin-bottom: 6px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid var(--border-light);
+            border-radius: 6px;
+            font-size: 13px;
+            font-family: inherit;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(196, 69, 105, 0.1);
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 12px;
+            margin-top: 24px;
+        }
+
+        .modal-actions button {
+            flex: 1;
+            padding: 10px 16px;
+            border: none;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 13px;
+            cursor: pointer;
+            transition: var(--transition-fast);
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
+        }
+
+        .btn-secondary {
+            background: var(--border-light);
+            color: var(--text-primary);
+        }
+
+        .btn-secondary:hover {
+            background: var(--border-dark);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .stat-card {
+            background: var(--bg-white);
+            padding: 16px;
+            border-radius: 8px;
+            text-align: center;
+            border: 1px solid var(--border-light);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .stat-value {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 4px;
+        }
+
+        .stat-label {
+            font-size: 11px;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        @media (max-width: 768px) {
+            .filters-bar {
+                grid-template-columns: 1fr;
+            }
+
+            .orders-table {
+                font-size: 11px;
+            }
+
+            .orders-table th,
+            .orders-table td {
+                padding: 8px 10px;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+            }
+
+            .btn-sm {
+                width: 100%;
+            }
+
+            .modal-content {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- HEADER -->
+    <header class="header">
+        <div class="header-left">
+            <div class="header-logo">
+                <div class="logo-text">Emily Bakes Cakes</div>
+            </div>
+        </div>
+        <div class="header-center">
+            <div class="header-user">
+                <div class="role-badge" id="staff-role">MANAGER</div>
+                <div class="manager-name" id="staff-name">Manager</div>
+            </div>
+        </div>
+        <div class="header-right">
+            <button class="header-btn" onclick="backToSite()">← Back to Site</button>
+            <button class="logout-btn header-btn" onclick="handleLogout()">Logout</button>
+        </div>
+    </header>
+
+    <!-- LEFT NAVIGATION -->
+    <nav class="nav-sidebar">
+        <ul>
+            <li><a href="#" onclick="goToDashboard(); return false;" class="nav-link">Dashboard</a></li>
+            <li><a href="all-orders.html" class="nav-link active">View Orders</a></li>
+            <li><a href="all-customers.html" class="nav-link">View Customers</a></li>
+            <li><a href="view-products.html" class="nav-link">View Products</a></li>
+            <li><a href="reports.html" class="nav-link">Reports</a></li>
+        </ul>
+    </nav>
+
+    <!-- MAIN CONTENT -->
+    <main class="main-content">
+        <div class="content">
+            <!-- PAGE HEADER -->
+            <div class="page-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+                <div>
+                    <h1 class="page-title">All Orders</h1>
+                    <p class="page-subtitle">Manage and track all customer orders</p>
+                </div>
+                <a href="../order-form.html" class="action-btn-large" style="text-decoration: none;">+ Create New Order</a>
+            </div>
+
+            <!-- FILTERS -->
+            <div class="filters-bar">
+                <div class="filter-group">
+                    <label>Search by Order ID or Customer</label>
+                    <input type="text" id="searchInput" placeholder="Search...">
+                </div>
+                <div class="filter-group">
+                    <label>Status</label>
+                    <select id="statusFilter">
+                        <option value="">All Statuses</option>
+                        <option value="pending">Pending</option>
+                        <option value="confirmed">Confirmed</option>
+                        <option value="completed">Completed</option>
+                        <option value="cancelled">Cancelled</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label>Date Range</label>
+                    <input type="date" id="dateFilter">
+                </div>
+                <div class="filter-group" style="align-self: flex-end;">
+                    <button class="action-btn-primary" onclick="resetFilters()">Reset Filters</button>
+                </div>
+            </div>
+
+            <!-- ORDERS TABLE -->
+            <div class="orders-table-container">
+                <table class="orders-table" id="ordersTable">
+                    <thead>
+                        <tr>
+                            <th>Order ID</th>
+                            <th>Customer</th>
+                            <th>Order Date</th>
+                            <th>Pickup Date</th>
+                            <th>Amount</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="ordersTableBody">
+                        <tr>
+                            <td colspan="7" class="empty-state">
+                                <div class="empty-state-icon">📦</div>
+                                <p>No orders found</p>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+    <!-- EDIT ORDER MODAL -->
+    <div class="modal" id="editModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span>Edit Order</span>
+                <button class="modal-close" onclick="closeModal('editModal')">✕</button>
+            </div>
+            <form id="editForm">
+                <div class="form-group">
+                    <label>Order ID</label>
+                    <input type="text" id="editOrderId" disabled>
+                </div>
+                <div class="form-group">
+                    <label>Customer Name</label>
+                    <input type="text" id="editCustomerName" required>
+                </div>
+                <div class="form-group">
+                    <label>Customer Phone</label>
+                    <input type="tel" id="editCustomerPhone" required>
+                </div>
+                <div class="form-group">
+                    <label>Cake Details</label>
+                    <input type="text" id="editCakeDetails" placeholder="Size, flavor, color, etc.">
+                </div>
+                <div class="form-group">
+                    <label>Order Amount ($)</label>
+                    <input type="number" id="editAmount" step="0.01" required>
+                </div>
+                <div class="form-group">
+                    <label>Status</label>
+                    <select id="editStatus" required>
+                        <option value="pending">Pending</option>
+                        <option value="confirmed">Confirmed</option>
+                        <option value="completed">Completed</option>
+                        <option value="cancelled">Cancelled</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Pickup Date</label>
+                    <input type="date" id="editPickupDate" required>
+                </div>
+                <div class="form-group">
+                    <label>Special Notes</label>
+                    <textarea id="editNotes" rows="3" placeholder="Any special instructions..."></textarea>
+                </div>
+                <div class="modal-actions">
+                    <button type="submit" class="btn-primary">Save Changes</button>
+                    <button type="button" class="btn-secondary" onclick="closeModal('editModal')">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- VIEW ORDER MODAL -->
+    <div class="modal" id="viewModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span>Order Details</span>
+                <button class="modal-close" onclick="closeModal('viewModal')">✕</button>
+            </div>
+            <div id="viewContent"></div>
+        </div>
+    </div>
+
+    <script src="js/main.js"></script>
+    <script>
+        // Sample orders data (in production, this would come from a server)
+        let allOrders = [
+            {
+                id: 'ORD-001',
+                customer: 'Sarah Johnson',
+                phone: '(713) 555-0100',
+                date: '2025-11-20',
+                pickupDate: '2025-11-25',
+                amount: 85.00,
+                status: 'confirmed',
+                cake: '12" Round - Vanilla, Chocolate Buttercream, White',
+                notes: 'Birthday cake for Sarah'
+            },
+            {
+                id: 'ORD-002',
+                customer: 'Michael Chen',
+                phone: '(713) 555-0101',
+                date: '2025-11-21',
+                pickupDate: '2025-11-28',
+                amount: 120.00,
+                status: 'pending',
+                cake: 'Full Sheet - Red Velvet, Cream Cheese, Red',
+                notes: 'Corporate event cake'
+            },
+            {
+                id: 'ORD-003',
+                customer: 'Emily Rodriguez',
+                phone: '(713) 555-0102',
+                date: '2025-11-19',
+                pickupDate: '2025-11-23',
+                amount: 45.00,
+                status: 'completed',
+                cake: '8" Round - Chocolate, Ganache, Black',
+                notes: ''
+            },
+            {
+                id: 'ORD-004',
+                customer: 'David Park',
+                phone: '(713) 555-0103',
+                date: '2025-11-18',
+                pickupDate: '2025-11-22',
+                amount: 65.00,
+                status: 'cancelled',
+                cake: '10" Round - Lemon, Lemon Curd, Yellow',
+                notes: 'Customer cancelled - scheduling conflict'
+            }
+        ];
+
+        let filteredOrders = [...allOrders];
+        let currentEditOrder = null;
+
+        function initializePage() {
+            loadOrders();
+        }
+
+        function loadOrders() {
+            const tbody = document.getElementById('ordersTableBody');
+            
+            if (filteredOrders.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="7" class="empty-state"><div class="empty-state-icon">📦</div><p>No orders found</p></td></tr>';
+                return;
+            }
+
+            tbody.innerHTML = filteredOrders.map(order => `
+                <tr>
+                    <td class="order-id">${order.id}</td>
+                    <td class="customer-name">${order.customer}</td>
+                    <td class="order-date">${new Date(order.date).toLocaleDateString()}</td>
+                    <td class="order-date">${new Date(order.pickupDate).toLocaleDateString()}</td>
+                    <td class="amount">$${order.amount.toFixed(2)}</td>
+                    <td><span class="status-badge status-${order.status}">${order.status}</span></td>
+                    <td>
+                        <div class="action-buttons">
+                            <button class="btn-sm btn-view" onclick="viewOrder('${order.id}')">View</button>
+                            <button class="btn-sm btn-edit" onclick="editOrder('${order.id}')">Edit</button>
+                            <button class="btn-sm btn-delete" onclick="deleteOrder('${order.id}')">Delete</button>
+                        </div>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+
+        function filterOrders() {
+            const search = document.getElementById('searchInput').value.toLowerCase();
+            const status = document.getElementById('statusFilter').value;
+            const date = document.getElementById('dateFilter').value;
+
+            filteredOrders = allOrders.filter(order => {
+                const matchesSearch = order.id.toLowerCase().includes(search) || 
+                                     order.customer.toLowerCase().includes(search);
+                const matchesStatus = !status || order.status === status;
+                const matchesDate = !date || order.pickupDate === date;
+
+                return matchesSearch && matchesStatus && matchesDate;
+            });
+
+            loadOrders();
+        }
+
+        function resetFilters() {
+            document.getElementById('searchInput').value = '';
+            document.getElementById('statusFilter').value = '';
+            document.getElementById('dateFilter').value = '';
+            filteredOrders = [...allOrders];
+            loadOrders();
+        }
+
+        function viewOrder(orderId) {
+            const order = allOrders.find(o => o.id === orderId);
+            if (!order) return;
+
+            const content = document.getElementById('viewContent');
+            content.innerHTML = `
+                <div style="line-height: 1.8;">
+                    <p><strong>Order ID:</strong> ${order.id}</p>
+                    <p><strong>Customer:</strong> ${order.customer}</p>
+                    <p><strong>Phone:</strong> ${order.phone}</p>
+                    <p><strong>Order Date:</strong> ${new Date(order.date).toLocaleDateString()}</p>
+                    <p><strong>Pickup Date:</strong> ${new Date(order.pickupDate).toLocaleDateString()}</p>
+                    <p><strong>Cake Details:</strong> ${order.cake}</p>
+                    <p><strong>Amount:</strong> $${order.amount.toFixed(2)}</p>
+                    <p><strong>Status:</strong> <span class="status-badge status-${order.status}">${order.status}</span></p>
+                    <p><strong>Notes:</strong> ${order.notes || 'No notes'}</p>
+                </div>
+            `;
+            openModal('viewModal');
+        }
+
+        function editOrder(orderId) {
+            const order = allOrders.find(o => o.id === orderId);
+            if (!order) return;
+
+            currentEditOrder = orderId;
+            document.getElementById('editOrderId').value = order.id;
+            document.getElementById('editCustomerName').value = order.customer;
+            document.getElementById('editCustomerPhone').value = order.phone;
+            document.getElementById('editCakeDetails').value = order.cake;
+            document.getElementById('editAmount').value = order.amount;
+            document.getElementById('editStatus').value = order.status;
+            document.getElementById('editPickupDate').value = order.pickupDate;
+            document.getElementById('editNotes').value = order.notes;
+
+            openModal('editModal');
+        }
+
+        function deleteOrder(orderId) {
+            if (!confirm('Are you sure you want to delete this order?')) return;
+
+            allOrders = allOrders.filter(o => o.id !== orderId);
+            filteredOrders = filteredOrders.filter(o => o.id !== orderId);
+            loadOrders();
+        }
+
+        document.getElementById('editForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const order = allOrders.find(o => o.id === currentEditOrder);
+            if (order) {
+                order.customer = document.getElementById('editCustomerName').value;
+                order.phone = document.getElementById('editCustomerPhone').value;
+                order.cake = document.getElementById('editCakeDetails').value;
+                order.amount = parseFloat(document.getElementById('editAmount').value);
+                order.status = document.getElementById('editStatus').value;
+                order.pickupDate = document.getElementById('editPickupDate').value;
+                order.notes = document.getElementById('editNotes').value;
+
+                filterOrders();
+                closeModal('editModal');
+                alert('Order updated successfully!');
+            }
+        });
+
+        function openModal(modalId) {
+            document.getElementById(modalId).classList.add('active');
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.remove('active');
+        }
+
+        // Add event listeners
+        document.getElementById('searchInput').addEventListener('input', filterOrders);
+        document.getElementById('statusFilter').addEventListener('change', filterOrders);
+        document.getElementById('dateFilter').addEventListener('change', filterOrders);
+
+        // Initialize
+        window.addEventListener('load', initializePage);
+    </script>
+</body>
+</html>

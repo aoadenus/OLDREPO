@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cake Order Form - Emily Bakes Cakes</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Poppins:wght@400;600&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Open Sans', sans-serif;
+            background: linear-gradient(135deg, #F8EBD7 0%, #E9E9E9 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #2B2B2B;
+        }
+
+        .container {
+            position: relative;
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: #C44569;
+            color: white;
+            padding: 40px 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 18px;
+            text-align: left;
+        }
+
+        .header .logo {
+            width: 72px;
+            height: 72px;
+            object-fit: contain;
+            border-radius: 8px;
+            background: white;
+            padding: 6px;
+        }
+
+        .header .header-text h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 36px;
+            margin-bottom: 6px;
+        }
+
+        .header .header-text p {
+            font-size: 16px;
+            opacity: 0.95;
+            margin: 0;
+        }
+
+        .form-content {
+            padding: 40px 30px;
+        }
+
+        .section {
+            margin-bottom: 40px;
+        }
+
+        .section-title {
+            font-family: 'Poppins', sans-serif;
+            font-size: 22px;
+            font-weight: 600;
+            color: #C44569;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #F8EBD7;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .form-row.two-col {
+            grid-template-columns: 1fr 1fr;
+        }
+
+        .form-row.three-col {
+            grid-template-columns: 1fr 1fr 1fr;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        label {
+            font-family: 'Poppins', sans-serif;
+            font-size: 14px;
+            font-weight: 600;
+            color: #2B2B2B;
+            margin-bottom: 8px;
+        }
+
+        label .required {
+            color: #C44569;
+        }
+
+        input,
+        select,
+        textarea {
+            font-family: 'Open Sans', sans-serif;
+            font-size: 15px;
+            padding: 12px 15px;
+            border: 2px solid #E9E9E9;
+            border-radius: 6px;
+            transition: border-color 0.3s;
+        }
+
+        input:focus,
+        select:focus,
+        textarea:focus {
+            outline: none;
+            border-color: #C44569;
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .price-display {
+            background: #F8EBD7;
+            padding: 25px;
+            border-radius: 8px;
+            margin-top: 30px;
+        }
+
+        .price-display h3 {
+            font-family: 'Poppins', sans-serif;
+            font-size: 20px;
+            color: #C44569;
+            margin-bottom: 15px;
+        }
+
+        .price-row {
+            display: flex;
+            justify-content: space-between;
+            font-size: 16px;
+            margin-bottom: 10px;
+        }
+
+        .price-row.total {
+            font-weight: 600;
+            font-size: 18px;
+            color: #C44569;
+            padding-top: 10px;
+            border-top: 2px solid #C44569;
+            margin-top: 10px;
+        }
+
+        .submit-btn {
+            width: 100%;
+            background: #C44569;
+            color: white;
+            font-family: 'Poppins', sans-serif;
+            font-size: 18px;
+            font-weight: 600;
+            padding: 16px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.3s;
+            margin-top: 30px;
+        }
+
+        .submit-btn:hover {
+            background: #A33854;
+        }
+
+        .back-btn {
+            position: absolute;
+            left: 16px;
+            top: 16px;
+            background: white;
+            color: #C44569;
+            border: 2px solid #E9E9E9;
+            padding: 8px 12px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+            transition: background 0.15s, transform 0.08s;
+        }
+
+        .back-btn:hover {
+            background: #FFF7F9;
+            transform: translateY(-1px);
+        }
+
+        .alert {
+            padding: 15px 20px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+        }
+
+        .alert-info {
+            background: #E3F2FD;
+            color: #1565C0;
+            border-left: 4px solid #1565C0;
+        }
+
+        .color-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 10px;
+        }
+
+        .color-option {
+            display: flex;
+            align-items: center;
+            padding: 8px;
+            border: 2px solid #E9E9E9;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .color-option:hover {
+            border-color: #C44569;
+        }
+
+        .color-option input[type="radio"] {
+            margin-right: 8px;
+        }
+
+        .color-swatch {
+            width: 24px;
+            height: 24px;
+            border-radius: 4px;
+            margin-right: 8px;
+            border: 1px solid #ccc;
+        }
+
+        @media (max-width: 768px) {
+            .form-row.two-col,
+            .form-row.three-col {
+                grid-template-columns: 1fr;
+            }
+
+            .header h1 {
+                font-size: 28px;
+            }
+
+            .form-content {
+                padding: 30px 20px;
+            }
+        }
+
+        /* Make the Full Name field and Phone align on larger screens */
+        .form-row.name-row {
+            display: flex;
+            align-items: flex-start;
+            gap: 18px;
+        }
+
+        .form-row.name-row .form-group {
+            flex: 0 0 auto;
+        }
+
+        .form-row.name-row .form-group input[name="customer_name"] {
+            width: 380px;
+            max-width: 100%;
+        }
+
+        .form-row.name-row .form-group input[name="customer_phone"] {
+            width: 420px;
+            max-width: 100%;
+        }
+
+        @media (max-width: 768px) {
+            .form-row.name-row {
+                display: block;
+            }
+
+            .form-row.name-row .form-group input[name="customer_name"],
+            .form-row.name-row .form-group input[name="customer_phone"] {
+                width: 100%;
+            }
+        }
+
+        /* Make the Email input match the Full Name width on larger screens */
+        .form-row .form-group input[name="customer_email"] {
+            width: 380px;
+            max-width: 100%;
+        }
+
+        @media (max-width: 768px) {
+            .form-row .form-group input[name="customer_email"] {
+                width: 100%;
+            }
+        }
+
+        /* Restore address field to original (full width) on larger screens */
+        .form-row .form-group input[name="customer_address"] {
+            width: 100%;
+            max-width: 100%;
+        }
+
+        @media (max-width: 768px) {
+            .form-row .form-group input[name="customer_address"] {
+                width: 100%;
+            }
+        }
+
+        /* Custom sizes for customization inputs */
+        .input-small input {
+            width: 240px;
+            max-width: 100%;
+        }
+
+        .input-medium input {
+            width: 420px;
+            max-width: 100%;
+        }
+
+        @media (max-width: 768px) {
+            .input-small input,
+            .input-medium input {
+                width: 100%;
+            }
+        }
+
+        /* Style for select when default flavor (Yellow) is selected to appear gray */
+        select.select-placeholder {
+            color: #6b6b6b;
+            background: #f4f4f4;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="dashboard/index.html" class="back-btn" aria-label="Back to Dashboard">← Dashboard</a>
+        <div class="header">
+            <img src="public/ebc-cake-images/logo.png" alt="Emily Bakes Cakes logo" class="logo" />
+            <div class="header-text">
+                <h1>Cake Order Form</h1>
+                <p>Customize your perfect celebration cake</p>
+            </div>
+        </div>
+
+        <div class="form-content">
+            <div class="alert alert-info">
+                <strong>Note:</strong> All custom cake orders require at least 2 days advance notice. A 50% deposit is required at the time of order.
+            </div>
+
+            <form id="orderForm">
+                <!-- Customer Information -->
+                <div class="section">
+                    <h2 class="section-title">Customer Information</h2>
+                    
+                    <div class="form-row name-row">
+                        <div class="form-group">
+                            <label>Full Name <span class="required">*</span></label>
+                            <input type="text" name="customer_name" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Phone Number <span class="required">*</span></label>
+                            <input type="tel" name="customer_phone" required placeholder="123-456-7890" pattern="\d{3}-\d{3}-\d{4}" title="Format: 123-456-7890" inputmode="tel">
+                        </div>
+                    </div>
+
+                    <div class="form-row two-col">
+                        <div class="form-group">
+                            <label>Email</label>
+                            <input type="email" name="customer_email">
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Address <span class="required">*</span></label>
+                            <input type="text" name="customer_address" required placeholder="Street, City, State, ZIP">
+                        </div>
+                    </div>
+
+                    <div class="form-row two-col">
+                        <div class="form-group">
+                            <label>Pickup Date <span class="required">*</span></label>
+                            <input type="date" name="pickup_date" id="pickupDate" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Pickup Time <span class="required">*</span></label>
+                            <input type="time" name="pickup_time" value="10:00" required>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Cake Details -->
+                <div class="section">
+                    <h2 class="section-title">Cake Details</h2>
+
+                    <div class="form-row two-col">
+                        <div class="form-group">
+                            <label>Cake Size <span class="required">*</span></label>
+                            <select name="size" id="cakeSize" required>
+                                <option value="">Select size...</option>
+                                <option value="6" data-price="20">6-inch Round Double Layer (Serves 4-6) - $20 <small style="color:#5A3825;">(default)</small></option>
+                                <option value="8" data-price="30">8-inch Round Double Layer (Serves 12-15) - $30</option>
+                                <option value="10" data-price="60">10-inch Round Double Layer (Serves 25-30) - $60</option>
+                                <option value="12" data-price="100">12-inch Round Double Layer (Serves 35) - $100</option>
+                                <option value="14" data-price="140">14-inch Round Double Layer (Serves 40) - $140</option>
+                                <option value="16" data-price="180">16-inch Round Double Layer (Serves 85) - $180</option>
+                                <option value="quarter" data-price="40">¼ Sheet Double Layer (Serves 15-20) - $40</option>
+                                <option value="half" data-price="100">½ Sheet Double Layer (Serves 30-50) - $100</option>
+                                <option value="full" data-price="200">Full Sheet Double Layer (Serves 90-100) - $200</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Occasion</label>
+                            <input type="text" name="occasion" placeholder="e.g., Birthday, Wedding, Baby Shower">
+                        </div>
+                    </div>
+
+                    <div class="form-row two-col">
+                        <div class="form-group">
+                            <label>Cake Flavor <span class="required">*</span></label>
+                            <select name="flavor" required>
+                                <option value="">Select flavor...</option>
+                                <option value="Vanilla">Vanilla</option>
+                                <option value="Almond">Almond</option>
+                                <option value="Yellow" selected>Yellow</option>
+                                <option value="Devils Food Chocolate">Devil's Food Chocolate</option>
+                                <option value="Chocolate">Chocolate</option>
+                                <option value="Strawberry">Strawberry</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Filling <span class="required">*</span></label>
+                            <select name="filling" required>
+                                <option value="">-- choose filling --</option>
+                                <option value="White Buttercream">White Buttercream</option>
+                                <option value="Chocolate Buttercream">Chocolate Buttercream</option>
+                                <option value="Almond Buttercream">Almond Buttercream</option>
+                                <option value="Cream Cheese">Cream Cheese</option>
+                                <option value="Lemon Curd">Lemon Curd</option>
+                                <option value="Strawberry">Strawberry</option>
+                                <option value="Rum/Strawberry">Rum/Strawberry</option>
+                                <option value="Raspberry">Raspberry</option>
+                                <option value="Pecan Praline">Pecan Praline</option>
+                                <option value="Chocolate Mousse">Chocolate Mousse</option>
+                                <option value="Lemon Mousse">Lemon Mousse</option>
+                                <option value="Strawberry Mousse">Strawberry Mousse</option>
+                                <option value="Raspberry Mousse">Raspberry Mousse</option>
+                                <option value="White Chocolate Mousse">White Chocolate Mousse</option>
+                                <option value="Mango Mousse">Mango Mousse</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-row two-col">
+                        <div class="form-group">
+                            <label>Icing Flavor <span class="required">*</span></label>
+                            <select name="icing_flavor" required>
+                                <option value="">-- choose icing --</option>
+                                <option value="White Buttercream">White Buttercream</option>
+                                <option value="Chocolate Buttercream">Chocolate Buttercream</option>
+                                <option value="Almond Buttercream">Almond Buttercream</option>
+                                <option value="White Chocolate Buttercream">White Chocolate Buttercream</option>
+                                <option value="Cream Cheese">Cream Cheese</option>
+                                <option value="Chocolate Ganache">Chocolate Ganache</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Icing Color <span class="required">*</span></label>
+                            <select name="icing_color" required>
+                                <option value="">Select color...</option>
+
+                                <optgroup label="Primary Colors">
+                                    <option value="Red">Red</option>
+                                    <option value="Royal Blue">Royal Blue</option>
+                                    <option value="Green">Green</option>
+                                    <option value="Yellow">Yellow</option>
+                                    <option value="Orange">Orange</option>
+                                </optgroup>
+
+                                <optgroup label="Pastel Colors">
+                                    <option value="Baby Pink">Baby Pink</option>
+                                    <option value="Baby Blue">Baby Blue</option>
+                                    <option value="Pastel Green">Pastel Green</option>
+                                    <option value="Pastel Yellow">Pastel Yellow</option>
+                                    <option value="Lavender">Lavender</option>
+                                </optgroup>
+
+                                <optgroup label="Neon Colors">
+                                    <option value="Hot Pink">Hot Pink</option>
+                                    <option value="Sky Blue">Sky Blue</option>
+                                    <option value="Neon Green">Neon Green</option>
+                                    <option value="Neon Yellow">Neon Yellow</option>
+                                    <option value="Neon Orange">Neon Orange</option>
+                                    <option value="Purple">Purple</option>
+                                </optgroup>
+
+                                <optgroup label="Fall Colors">
+                                    <option value="Fall Red">Fall Red</option>
+                                    <option value="Fall Green">Fall Green</option>
+                                    <option value="Fall Yellow">Fall Yellow</option>
+                                    <option value="Fall Orange">Fall Orange</option>
+                                    <option value="Brown">Brown</option>
+                                </optgroup>
+
+                                <optgroup label="Special / Metallic">
+                                    <option value="Ivory">Ivory</option>
+                                    <option value="Golden Yellow">Golden Yellow</option>
+                                    <option value="Gold">Gold</option>
+                                    <option value="Fuchsia">Fuchsia</option>
+                                    <option value="Maroon">Maroon</option>
+                                    <option value="Burgundy">Burgundy</option>
+                                    <option value="Burnt Orange">Burnt Orange</option>
+                                    <option value="Turquoise">Turquoise</option>
+                                    <option value="Navy Blue">Navy Blue</option>
+                                    <option value="Gray/Silver">Gray/Silver</option>
+                                    <option value="Black">Black</option>
+                                    <option value="White">White</option>
+                                </optgroup>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Customization -->
+                <div class="section">
+                    <h2 class="section-title">Customization</h2>
+
+                    <div class="form-row">
+                        <div class="form-group input-small">
+                            <label>Writing on Cake</label>
+                            <input type="text" name="writing_text" placeholder="e.g., Happy Birthday Sarah!">
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group input-medium">
+                            <label>Decoration Details</label>
+                            <input type="text" name="decorations" placeholder="e.g., Fresh flowers, sprinkles, edible glitter">
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Special Instructions</label>
+                            <textarea name="special_instructions" placeholder="Any dietary restrictions, allergies, or special requests..."></textarea>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Reference Photos</label>
+                            <input type="file" name="reference_photos" accept="image/*" multiple>
+                            <small style="color:#666; margin-top:6px;">Upload one or more images for reference (optional).</small>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Price Summary -->
+                <div class="price-display">
+                    <h3>Order Summary</h3>
+                    <div class="price-row">
+                        <span>Cake Price:</span>
+                        <span id="cakePrice">$0.00</span>
+                    </div>
+                    <div class="price-row total">
+                        <span>Total Amount:</span>
+                        <span id="totalAmount">$0.00</span>
+                    </div>
+                    <div class="price-row">
+                        <span>Required Deposit (50%):</span>
+                        <span id="depositAmount">$0.00</span>
+                    </div>
+                </div>
+
+                <button type="submit" class="submit-btn">Submit Order</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        const form = document.getElementById('orderForm');
+        const cakeSizeSelect = document.getElementById('cakeSize');
+        const pickupDateInput = document.getElementById('pickupDate');
+
+        const today = new Date();
+        const minDate = new Date(today);
+        minDate.setDate(minDate.getDate() + 2);
+        pickupDateInput.min = minDate.toISOString().split('T')[0];
+
+        function updatePricing() {
+            const selectedOption = cakeSizeSelect.options[cakeSizeSelect.selectedIndex];
+            const price = parseFloat(selectedOption.dataset.price) || 0;
+            
+            const cakePriceEl = document.getElementById('cakePrice');
+            const totalAmountEl = document.getElementById('totalAmount');
+            const depositAmountEl = document.getElementById('depositAmount');
+            
+            const deposit = price * 0.5;
+            
+            cakePriceEl.textContent = '$' + price.toFixed(2);
+            totalAmountEl.textContent = '$' + price.toFixed(2);
+            depositAmountEl.textContent = '$' + deposit.toFixed(2);
+        }
+
+        cakeSizeSelect.addEventListener('change', updatePricing);
+
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(form);
+            const orderData = {};
+            formData.forEach((value, key) => {
+                orderData[key] = value;
+            });
+            
+            orderData.total_amount = document.getElementById('totalAmount').textContent;
+            orderData.deposit_amount = document.getElementById('depositAmount').textContent;
+            
+            console.log('Order submitted:', orderData);
+            
+            alert('Order submitted successfully! In a production environment, this would be sent to the server.\n\nOrder Details:\n' + JSON.stringify(orderData, null, 2));
+            
+            form.reset();
+            updatePricing();
+        });
+
+        // Auto-format phone input as xxx-xxx-xxxx while typing
+        const phoneInput = document.querySelector('input[name="customer_phone"]');
+        if (phoneInput) {
+            phoneInput.addEventListener('input', function(e) {
+                const value = phoneInput.value.replace(/[^0-9]/g, '').slice(0,10);
+                let formatted = value;
+                if (value.length > 6) {
+                    formatted = value.slice(0,3) + '-' + value.slice(3,6) + '-' + value.slice(6);
+                } else if (value.length > 3) {
+                    formatted = value.slice(0,3) + '-' + value.slice(3);
+                }
+                phoneInput.value = formatted;
+            });
+
+            // When leaving the field, ensure it matches the pattern if not empty
+            phoneInput.addEventListener('blur', function() {
+                const pattern = /^(\d{3}-\d{3}-\d{4})$/;
+                if (phoneInput.value && !pattern.test(phoneInput.value)) {
+                    // keep focus so user can correct; simple UX choice
+                    // alternatively, you could auto-pad or show validation message
+                }
+            });
+        }
+
+        // Show Yellow (default) in gray styling inside the select box
+        const flavorSelect = document.querySelector('select[name="flavor"]');
+        function updateFlavorPlaceholderClass() {
+            if (!flavorSelect) return;
+            if (flavorSelect.value === 'Yellow') {
+                flavorSelect.classList.add('select-placeholder');
+            } else {
+                flavorSelect.classList.remove('select-placeholder');
+            }
+        }
+        if (flavorSelect) {
+            // set initial state
+            updateFlavorPlaceholderClass();
+            flavorSelect.addEventListener('change', updateFlavorPlaceholderClass);
+        }
+    </script>
+</body>
+</html>

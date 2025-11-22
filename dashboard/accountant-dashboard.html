@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Baker Dashboard - Emily Bakes Cakes</title>
+    <title>Accountant Dashboard - Emily Bakes Cakes</title>
     <link rel="stylesheet" href="css/dashboard-redesigned.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
     <style>
@@ -219,6 +219,21 @@
             color: #065F46;
         }
 
+        .status-badge.status-paid {
+            background: #D1FAE5;
+            color: #065F46;
+        }
+
+        .status-badge.status-pending {
+            background: #FEF3C7;
+            color: #92400E;
+        }
+
+        .status-badge.status-overdue {
+            background: #FEE2E2;
+            color: #991B1B;
+        }
+
         /* Schedule Section - Smaller */
         .schedule-card {
             background: white;
@@ -292,7 +307,7 @@
     <!-- LEFT NAVIGATION -->
     <nav class="nav-sidebar">
         <ul>
-            <li><a href="baker-dashboard.html" class="nav-link active">Dashboard</a></li>
+            <li><a href="accountant-dashboard.html" class="nav-link active">Dashboard</a></li>
             <li><a href="all-orders.html" class="nav-link">View Orders</a></li>
             <li><a href="all-customers.html" class="nav-link">View Customers</a></li>
             <li><a href="view-products.html" class="nav-link">View Products</a></li>
@@ -305,41 +320,41 @@
         <div class="content">
             <!-- KPI CARDS -->
             <div class="kpi-row">
-                <div class="kpi-card" onclick="location.href='#todays-pickups'">
-                    <div class="kpi-icon">📦</div>
-                    <div class="kpi-value" id="todays-pickups-count">0</div>
-                    <div class="kpi-label">Today's Pickups</div>
-                </div>
-                <div class="kpi-card green" onclick="location.href='all-orders.html'">
-                    <div class="kpi-icon">📋</div>
-                    <div class="kpi-value" id="total-orders-count">0</div>
-                    <div class="kpi-label">Total Orders</div>
-                </div>
-                <div class="kpi-card orange" onclick="location.href='reports.html'">
+                <div class="kpi-card">
                     <div class="kpi-icon">💰</div>
-                    <div class="kpi-value" id="weekly-revenue">$0</div>
-                    <div class="kpi-label">Weekly Revenue</div>
+                    <div class="kpi-value" id="monthly-revenue">$12,450</div>
+                    <div class="kpi-label">Monthly Revenue</div>
                 </div>
-                <div class="kpi-card blue" onclick="location.href='all-customers.html'">
-                    <div class="kpi-icon">👥</div>
-                    <div class="kpi-value" id="new-customers-count">0</div>
-                    <div class="kpi-label">New Customers</div>
+                <div class="kpi-card orange">
+                    <div class="kpi-icon">💸</div>
+                    <div class="kpi-value" id="monthly-expenses">$8,200</div>
+                    <div class="kpi-label">Monthly Expenses</div>
+                </div>
+                <div class="kpi-card green">
+                    <div class="kpi-icon">📊</div>
+                    <div class="kpi-value" id="net-profit">$4,250</div>
+                    <div class="kpi-label">Net Profit</div>
+                </div>
+                <div class="kpi-card blue">
+                    <div class="kpi-icon">🔔</div>
+                    <div class="kpi-value" id="outstanding-balance">$2,340</div>
+                    <div class="kpi-label">Outstanding Balances</div>
                 </div>
             </div>
 
             <!-- QUICK ACTIONS BAR -->
             <div class="quick-actions-bar">
-                <a href="../order-form.html" class="action-btn primary">
+                <a href="all-orders.html" class="action-btn primary">
+                    <span class="action-icon">📝</span>
+                    <span>View Transactions</span>
+                </a>
+                <a href="#" class="action-btn" onclick="alert('Add Expense Entry feature coming soon!'); return false;">
                     <span class="action-icon">➕</span>
-                    <span>Create New Order</span>
+                    <span>Add Expense Entry</span>
                 </a>
-                <a href="new-customer.html" class="action-btn">
-                    <span class="action-icon">👤</span>
-                    <span>Add Customer</span>
-                </a>
-                <a href="manage-products.html" class="action-btn">
-                    <span class="action-icon">🎂</span>
-                    <span>Manage Products</span>
+                <a href="#" class="action-btn" onclick="alert('View Invoices feature coming soon!'); return false;">
+                    <span class="action-icon">📄</span>
+                    <span>View Invoices</span>
                 </a>
                 <a href="reports.html" class="action-btn">
                     <span class="action-icon">📊</span>
@@ -350,58 +365,58 @@
             <!-- CHARTS -->
             <div class="charts-grid">
                 <div class="chart-card">
-                    <h3 class="chart-title"><span>📈</span> Revenue Trend (7 Days)</h3>
+                    <h3 class="chart-title"><span>📈</span> Revenue Trend (30 Days)</h3>
                     <div class="chart-container">
                         <canvas id="revenueChart"></canvas>
                     </div>
                 </div>
                 <div class="chart-card">
-                    <h3 class="chart-title"><span>🎂</span> Popular Products</h3>
+                    <h3 class="chart-title"><span>🥧</span> Expense Distribution</h3>
                     <div class="chart-container">
-                        <canvas id="productsChart"></canvas>
+                        <canvas id="expenseChart"></canvas>
                     </div>
                 </div>
                 <div class="chart-card">
-                    <h3 class="chart-title"><span>📊</span> Order Status</h3>
+                    <h3 class="chart-title"><span>📊</span> Weekly Profit Comparison</h3>
                     <div class="chart-container">
-                        <canvas id="statusChart"></canvas>
+                        <canvas id="profitChart"></canvas>
                     </div>
                 </div>
             </div>
 
             <!-- TABLES -->
             <div class="tables-grid">
-                <!-- TODAY'S PICKUPS -->
-                <div class="table-card" id="todays-pickups">
-                    <h3 class="table-title"><span>📦</span> Today's Pickups</h3>
+                <!-- RECENT TRANSACTIONS -->
+                <div class="table-card" id="recent-transactions">
+                    <h3 class="table-title"><span>💳</span> Recent Transactions</h3>
                     <table class="compact-table">
                         <thead>
                             <tr>
-                                <th>Time</th>
-                                <th>Customer</th>
-                                <th>Cake</th>
+                                <th>Date</th>
+                                <th>Description</th>
+                                <th>Amount</th>
                                 <th>Status</th>
                             </tr>
                         </thead>
-                        <tbody id="todays-pickups-tbody">
+                        <tbody id="transactions-tbody">
                             <tr><td colspan="4" style="text-align: center; padding: 20px;">Loading...</td></tr>
                         </tbody>
                     </table>
                 </div>
 
-                <!-- RECENT ORDERS -->
+                <!-- OUTSTANDING INVOICES -->
                 <div class="table-card">
-                    <h3 class="table-title"><span>📋</span> Recent Orders</h3>
+                    <h3 class="table-title"><span>📄</span> Outstanding Invoices</h3>
                     <table class="compact-table">
                         <thead>
                             <tr>
-                                <th>ID</th>
+                                <th>Invoice #</th>
                                 <th>Customer</th>
+                                <th>Amount</th>
                                 <th>Status</th>
-                                <th>Total</th>
                             </tr>
                         </thead>
-                        <tbody id="recent-orders-tbody">
+                        <tbody id="invoices-tbody">
                             <tr><td colspan="4" style="text-align: center; padding: 20px;">Loading...</td></tr>
                         </tbody>
                     </table>
@@ -444,39 +459,44 @@
 
     <script src="js/main.js"></script>
     <script>
-        // Mock dashboard data
+        // Mock dashboard data for accountant
         const dashboardData = {
-            orders: [
-                { id: 'ORD001', customer: 'Sarah Johnson', status: 'ready', total: 145, pickup: '10:00 AM', cake: 'Chocolate Velvet' },
-                { id: 'ORD002', customer: 'Mike Brown', status: 'decorating', total: 120, pickup: '2:00 PM', cake: 'Vanilla Dream' },
-                { id: 'ORD003', customer: 'Emily Davis', status: 'baking', total: 165, pickup: '4:30 PM', cake: 'Red Velvet' },
-                { id: 'ORD004', customer: 'John Smith', status: 'ready', total: 135, pickup: '11:30 AM', cake: 'Strawberry Bliss' },
-                { id: 'ORD005', customer: 'Lisa Wilson', status: 'ready', total: 150, pickup: '3:00 PM', cake: 'Lemon Zest' },
-                { id: 'ORD006', customer: 'David Clark', status: 'baking', total: 175, pickup: '5:00 PM', cake: 'Black Forest' }
-            ]
+            transactions: [
+                { date: 'Jan 15', description: 'Custom Wedding Cake', amount: 450, status: 'paid' },
+                { date: 'Jan 15', description: 'Birthday Cake Order', amount: 120, status: 'paid' },
+                { date: 'Jan 14', description: 'Walk-in Sale', amount: 85, status: 'paid' },
+                { date: 'Jan 13', description: 'Special Event Order', amount: 275, status: 'pending' },
+                { date: 'Jan 12', description: 'Corporate Catering', amount: 680, status: 'paid' }
+            ],
+            invoices: [
+                { invoice: 'INV-1023', customer: 'ABC Corp', amount: 450, status: 'pending' },
+                { invoice: 'INV-1019', customer: 'John Smith', amount: 180, status: 'overdue' },
+                { invoice: 'INV-1015', customer: 'Sarah Johnson', amount: 220, status: 'pending' }
+            ],
+            expenses: {
+                ingredients: 3200,
+                utilities: 850,
+                rent: 2500,
+                supplies: 450,
+                marketing: 600,
+                other: 600
+            }
         };
 
         document.addEventListener('DOMContentLoaded', () => {
             if (!checkAuthentication()) return;
             updateHeaderWithUserInfo();
             initializeNav();
-            initializeBAKERDashboard();
+            initializeACCOUNTANTDashboard();
         });
 
-        function initializeBAKERDashboard() {
-            // Calculate KPIs
-            const todaysPickups = dashboardData.orders.filter(o => o.status === 'ready');
-            const weeklyRevenue = dashboardData.orders.reduce((sum, o) => sum + o.total, 0);
-
-            // Update KPI values
-            document.getElementById('todays-pickups-count').textContent = todaysPickups.length;
-            document.getElementById('total-orders-count').textContent = dashboardData.orders.length;
-            document.getElementById('weekly-revenue').textContent = '$' + weeklyRevenue.toFixed(0);
-            document.getElementById('new-customers-count').textContent = '12';
+        function initializeACCOUNTANTDashboard() {
+            // KPI values are already set in HTML with static values
+            // In a real application, these would be calculated from actual data
 
             // Populate tables
-            populateTodaysPickups();
-            populateRecentOrders();
+            populateTransactions();
+            populateInvoices();
 
             // Initialize charts
             setTimeout(() => {
@@ -489,60 +509,60 @@
             }, 200);
         }
 
-        function populateTodaysPickups() {
-            const tbody = document.getElementById('todays-pickups-tbody');
-            const pickups = dashboardData.orders.filter(o => o.status === 'ready');
+        function populateTransactions() {
+            const tbody = document.getElementById('transactions-tbody');
 
-            if (pickups.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="4" style="text-align: center; padding: 20px; color: #9CA3AF;">No pickups today</td></tr>';
+            if (dashboardData.transactions.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="4" style="text-align: center; padding: 20px; color: #9CA3AF;">No transactions today</td></tr>';
                 return;
             }
 
-            tbody.innerHTML = pickups.map(order => `
+            tbody.innerHTML = dashboardData.transactions.map(transaction => `
                 <tr>
-                    <td><strong>${order.pickup}</strong></td>
-                    <td>${order.customer}</td>
-                    <td>${order.cake}</td>
-                    <td><span class="status-badge status-${order.status}">${order.status}</span></td>
+                    <td><strong>${transaction.date}</strong></td>
+                    <td>${transaction.description}</td>
+                    <td><strong>$${transaction.amount}</strong></td>
+                    <td><span class="status-badge status-${transaction.status}">${transaction.status}</span></td>
                 </tr>
             `).join('');
         }
 
-        function populateRecentOrders() {
-            const tbody = document.getElementById('recent-orders-tbody');
-            const orders = dashboardData.orders.slice(0, 5);
+        function populateInvoices() {
+            const tbody = document.getElementById('invoices-tbody');
 
-            tbody.innerHTML = orders.map(order => `
+            if (dashboardData.invoices.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="4" style="text-align: center; padding: 20px; color: #9CA3AF;">No outstanding invoices</td></tr>';
+                return;
+            }
+
+            tbody.innerHTML = dashboardData.invoices.map(invoice => `
                 <tr>
-                    <td><strong>${order.id}</strong></td>
-                    <td>${order.customer}</td>
-                    <td><span class="status-badge status-${order.status}">${order.status}</span></td>
-                    <td><strong>$${order.total}</strong></td>
+                    <td><strong>${invoice.invoice}</strong></td>
+                    <td>${invoice.customer}</td>
+                    <td><strong>$${invoice.amount}</strong></td>
+                    <td><span class="status-badge status-${invoice.status}">${invoice.status}</span></td>
                 </tr>
             `).join('');
         }
 
         function initializeCharts() {
-            console.log('initializeCharts called');
-            // Revenue Trend Chart
+            // Revenue Trend Chart (30 Days)
             const revenueCtx = document.getElementById('revenueChart');
-            console.log('revenueChart element:', revenueCtx);
             if (revenueCtx) {
-                console.log('Creating revenue chart...');
                 new Chart(revenueCtx, {
                     type: 'line',
                     data: {
-                        labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+                        labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4'],
                         datasets: [{
                             label: 'Revenue',
-                            data: [340, 420, 380, 510, 460, 390, 435],
-                            borderColor: '#C44569',
-                            backgroundColor: 'rgba(196, 69, 105, 0.1)',
+                            data: [2850, 3120, 3340, 2950],
+                            borderColor: '#10B981',
+                            backgroundColor: 'rgba(16, 185, 129, 0.1)',
                             fill: true,
                             tension: 0.4,
                             pointRadius: 4,
                             pointHoverRadius: 6,
-                            pointBackgroundColor: '#C44569',
+                            pointBackgroundColor: '#10B981',
                             pointBorderColor: '#fff',
                             pointBorderWidth: 2
                         }]
@@ -571,55 +591,32 @@
                 });
             }
 
-            // Popular Products Chart
-            const productsCtx = document.getElementById('productsChart');
-            if (productsCtx) {
-                new Chart(productsCtx, {
-                    type: 'bar',
-                    data: {
-                        labels: ['Chocolate', 'Vanilla', 'Red Velvet', 'Strawberry', 'Lemon'],
-                        datasets: [{
-                            label: 'Orders',
-                            data: [12, 10, 8, 7, 6],
-                            backgroundColor: '#10B981',
-                            borderRadius: 6,
-                            borderSkipped: false
-                        }]
-                    },
-                    options: {
-                        indexAxis: 'y',
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        plugins: {
-                            legend: { display: false }
-                        },
-                        scales: {
-                            x: {
-                                beginAtZero: true,
-                                ticks: { font: { size: 11 } },
-                                grid: { color: '#F3F4F6' }
-                            },
-                            y: {
-                                ticks: { font: { size: 11 } },
-                                grid: { display: false }
-                            }
-                        }
-                    }
-                });
-            }
-
-            // Order Status Chart
-            const statusCtx = document.getElementById('statusChart');
-            if (statusCtx) {
-                new Chart(statusCtx, {
+            // Expense Distribution Chart
+            const expenseCtx = document.getElementById('expenseChart');
+            if (expenseCtx) {
+                new Chart(expenseCtx, {
                     type: 'doughnut',
                     data: {
-                        labels: ['Ready', 'Decorating', 'Baking'],
+                        labels: ['Ingredients', 'Rent', 'Utilities', 'Marketing', 'Supplies', 'Other'],
                         datasets: [{
-                            data: [3, 1, 2],
-                            backgroundColor: ['#10B981', '#A855F7', '#F59E0B'],
+                            data: [
+                                dashboardData.expenses.ingredients,
+                                dashboardData.expenses.rent,
+                                dashboardData.expenses.utilities,
+                                dashboardData.expenses.marketing,
+                                dashboardData.expenses.supplies,
+                                dashboardData.expenses.other
+                            ],
+                            backgroundColor: [
+                                '#F59E0B',
+                                '#C44569',
+                                '#3B82F6',
+                                '#10B981',
+                                '#A855F7',
+                                '#6B7280'
+                            ],
                             borderColor: '#fff',
-                            borderWidth: 3
+                            borderWidth: 2
                         }]
                     },
                     options: {
@@ -629,10 +626,49 @@
                             legend: {
                                 position: 'bottom',
                                 labels: {
-                                    font: { size: 11 },
+                                    font: { size: 10 },
                                     usePointStyle: true,
-                                    padding: 12
+                                    padding: 8
                                 }
+                            }
+                        }
+                    }
+                });
+            }
+
+            // Weekly Profit Comparison Chart
+            const profitCtx = document.getElementById('profitChart');
+            if (profitCtx) {
+                new Chart(profitCtx, {
+                    type: 'bar',
+                    data: {
+                        labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4'],
+                        datasets: [{
+                            label: 'Profit',
+                            data: [850, 1120, 1340, 950],
+                            backgroundColor: '#10B981',
+                            borderRadius: 6,
+                            borderSkipped: false
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: { display: false }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                ticks: {
+                                    callback: v => '$' + v,
+                                    font: { size: 11 }
+                                },
+                                grid: { color: '#F3F4F6' }
+                            },
+                            x: {
+                                ticks: { font: { size: 11 } },
+                                grid: { display: false }
                             }
                         }
                     }

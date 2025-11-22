@@ -1,4 +1,4 @@
-// Emily Bakes Cakes - Staff Dashboard JavaScript
+﻿// Emily Bakes Cakes - Staff Dashboard JavaScript
 // Simple vanilla JavaScript for charts and search functionality
 
 // Wait for page to load

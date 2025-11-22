@@ -1,0 +1,659 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All Customers - Emily Bakes Cakes</title>
+    <link rel="stylesheet" href="css/dashboard-redesigned.css">
+    <style>
+        .filters-bar {
+            background: var(--bg-white);
+            padding: 16px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 12px;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--border-light);
+        }
+
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .filter-group label {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .filter-group select,
+        .filter-group input {
+            padding: 8px 12px;
+            border: 1px solid var(--border-light);
+            border-radius: 6px;
+            font-size: 13px;
+        }
+
+        .filter-group select:focus,
+        .filter-group input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(196, 69, 105, 0.1);
+        }
+
+        .customers-table-container {
+            background: var(--bg-white);
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--border-light);
+        }
+
+        .customers-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .customers-table thead {
+            background: var(--bg-light);
+            border-bottom: 2px solid var(--border-light);
+        }
+
+        .customers-table th {
+            padding: 12px 14px;
+            text-align: left;
+            font-weight: 600;
+            font-size: 11px;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .customers-table tbody tr {
+            border-bottom: 1px solid var(--border-light);
+            transition: var(--transition-fast);
+        }
+
+        .customers-table tbody tr:hover {
+            background: var(--bg-light);
+        }
+
+        .customers-table td {
+            padding: 12px 14px;
+            font-size: 13px;
+            color: var(--text-primary);
+        }
+
+        .customer-name {
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        .customer-email {
+            color: var(--text-secondary);
+            font-size: 12px;
+        }
+
+        .order-count {
+            background: rgba(196, 69, 105, 0.1);
+            color: var(--primary);
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-weight: 600;
+            font-size: 12px;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 8px;
+        }
+
+        .btn-sm {
+            padding: 6px 10px;
+            border: none;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition-fast);
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-view {
+            background: var(--info);
+            color: white;
+        }
+
+        .btn-view:hover {
+            background: #2563eb;
+            transform: translateY(-1px);
+        }
+
+        .btn-edit {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-edit:hover {
+            background: var(--primary-dark);
+            transform: translateY(-1px);
+        }
+
+        .btn-delete {
+            background: var(--danger);
+            color: white;
+        }
+
+        .btn-delete:hover {
+            background: #dc2626;
+            transform: translateY(-1px);
+        }
+
+        .empty-state {
+            padding: 60px 20px;
+            text-align: center;
+            color: var(--text-secondary);
+        }
+
+        .empty-state-icon {
+            font-size: 48px;
+            margin-bottom: 16px;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: var(--bg-white);
+            border-radius: 8px;
+            padding: 32px;
+            max-width: 600px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 20px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .modal-header {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: var(--text-secondary);
+        }
+
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            font-size: 12px;
+            color: var(--text-primary);
+            margin-bottom: 6px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid var(--border-light);
+            border-radius: 6px;
+            font-size: 13px;
+            font-family: inherit;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(196, 69, 105, 0.1);
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 12px;
+            margin-top: 24px;
+        }
+
+        .modal-actions button {
+            flex: 1;
+            padding: 10px 16px;
+            border: none;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 13px;
+            cursor: pointer;
+            transition: var(--transition-fast);
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
+        }
+
+        .btn-secondary {
+            background: var(--border-light);
+            color: var(--text-primary);
+        }
+
+        .btn-secondary:hover {
+            background: var(--border-dark);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .stat-card {
+            background: var(--bg-white);
+            padding: 16px;
+            border-radius: 8px;
+            text-align: center;
+            border: 1px solid var(--border-light);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .stat-value {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 4px;
+        }
+
+        .stat-label {
+            font-size: 11px;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .add-btn {
+            background: var(--primary);
+            color: white;
+            padding: 10px 16px;
+            border: none;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 13px;
+            cursor: pointer;
+            transition: var(--transition-fast);
+            margin-bottom: 20px;
+        }
+
+        .add-btn:hover {
+            background: var(--primary-dark);
+        }
+
+        @media (max-width: 768px) {
+            .filters-bar {
+                grid-template-columns: 1fr;
+            }
+
+            .customers-table {
+                font-size: 11px;
+            }
+
+            .customers-table th,
+            .customers-table td {
+                padding: 8px 10px;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+            }
+
+            .btn-sm {
+                width: 100%;
+            }
+
+            .modal-content {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- HEADER -->
+    <header class="header">
+        <div class="header-left">
+            <div class="header-logo">
+                <div class="logo-text">Emily Bakes Cakes</div>
+            </div>
+        </div>
+        <div class="header-center">
+            <div class="header-user">
+                <div class="role-badge" id="staff-role">MANAGER</div>
+                <div class="manager-name" id="staff-name">Manager</div>
+            </div>
+        </div>
+        <div class="header-right">
+            <button class="header-btn" onclick="backToSite()">← Back to Site</button>
+            <button class="logout-btn header-btn" onclick="handleLogout()">Logout</button>
+        </div>
+    </header>
+
+    <!-- LEFT NAVIGATION -->
+    <nav class="nav-sidebar">
+        <ul>
+            <li><a href="#" onclick="goToDashboard(); return false;" class="nav-link">Dashboard</a></li>
+            <li><a href="all-orders.html" class="nav-link">View Orders</a></li>
+            <li><a href="all-customers.html" class="nav-link active">View Customers</a></li>
+            <li><a href="view-products.html" class="nav-link">View Products</a></li>
+            <li><a href="reports.html" class="nav-link">Reports</a></li>
+        </ul>
+    </nav>
+
+    <!-- MAIN CONTENT -->
+    <main class="main-content">
+        <div class="content">
+            <!-- PAGE HEADER -->
+            <div class="page-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+                <div>
+                    <h1 class="page-title">All Customers</h1>
+                    <p class="page-subtitle">Manage customer information and history</p>
+                </div>
+                <a href="new-customer.html" class="action-btn-large" style="text-decoration: none;">+ Create New Customer</a>
+            </div>
+
+            <!-- FILTERS -->
+            <div class="filters-bar">
+                <div class="filter-group">
+                    <label>Search by Name or Phone</label>
+                    <input type="text" id="searchInput" placeholder="Search...">
+                </div>
+                <div class="filter-group">
+                    <label>Customer Type</label>
+                    <select id="typeFilter">
+                        <option value="">All Types</option>
+                        <option value="repeat">Repeat Customer</option>
+                        <option value="new">New Customer</option>
+                    </select>
+                </div>
+                <div class="filter-group" style="align-self: flex-end;">
+                    <button class="action-btn-primary" onclick="resetFilters()">Reset Filters</button>
+                </div>
+            </div>
+
+            <!-- CUSTOMERS TABLE -->
+            <div class="customers-table-container">
+                <table class="customers-table" id="customersTable">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Phone</th>
+                            <th>Orders</th>
+                            <th>Join Date</th>
+                            <th>Type</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="customersTableBody">
+                        <tr>
+                            <td colspan="7" class="empty-state">
+                                <div class="empty-state-icon">👥</div>
+                                <p>No customers found</p>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+    <!-- EDIT CUSTOMER MODAL -->
+    <div class="modal" id="editModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span>Edit Customer</span>
+                <button class="modal-close" onclick="closeModal('editModal')">✕</button>
+            </div>
+            <form id="editForm">
+                <div class="form-group">
+                    <label>Full Name *</label>
+                    <input type="text" id="editName" required>
+                </div>
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" id="editEmail">
+                </div>
+                <div class="form-group">
+                    <label>Phone *</label>
+                    <input type="tel" id="editPhone" required>
+                </div>
+                <div class="form-group">
+                    <label>Address</label>
+                    <input type="text" id="editAddress">
+                </div>
+                <div class="modal-actions">
+                    <button type="submit" class="btn-primary">Save Changes</button>
+                    <button type="button" class="btn-secondary" onclick="closeModal('editModal')">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- VIEW CUSTOMER MODAL -->
+    <div class="modal" id="viewModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span>Customer Details</span>
+                <button class="modal-close" onclick="closeModal('viewModal')">✕</button>
+            </div>
+            <div id="viewContent"></div>
+        </div>
+    </div>
+
+    <script src="js/main.js"></script>
+    <script>
+        // Sample customers data
+        let allCustomers = [
+            {
+                id: 'CUST-001',
+                name: 'Sarah Johnson',
+                email: 'sarah.johnson@email.com',
+                phone: '(713) 555-0100',
+                address: '123 Main St, Houston, TX',
+                joinDate: '2025-09-15',
+                orders: 3,
+                type: 'repeat'
+            },
+            {
+                id: 'CUST-002',
+                name: 'Michael Chen',
+                email: 'mchen@email.com',
+                phone: '(713) 555-0101',
+                address: '456 Oak Ave, Houston, TX',
+                joinDate: '2025-11-20',
+                orders: 1,
+                type: 'new'
+            },
+            {
+                id: 'CUST-003',
+                name: 'Emily Rodriguez',
+                email: 'emily.r@email.com',
+                phone: '(713) 555-0102',
+                address: '789 Pine Rd, Houston, TX',
+                joinDate: '2025-08-10',
+                orders: 5,
+                type: 'repeat'
+            },
+            {
+                id: 'CUST-004',
+                name: 'David Park',
+                email: 'dpark@email.com',
+                phone: '(713) 555-0103',
+                address: '321 Elm St, Houston, TX',
+                joinDate: '2025-10-05',
+                orders: 2,
+                type: 'repeat'
+            }
+        ];
+
+        let filteredCustomers = [...allCustomers];
+        let currentEditCustomerId = null;
+        let nextCustomerId = 5;
+
+        function initializePage() {
+            loadCustomers();
+        }
+
+        function loadCustomers() {
+            const tbody = document.getElementById('customersTableBody');
+            
+            if (filteredCustomers.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="7" class="empty-state"><div class="empty-state-icon">👥</div><p>No customers found</p></td></tr>';
+                return;
+            }
+
+            tbody.innerHTML = filteredCustomers.map(customer => `
+                <tr>
+                    <td class="customer-name">${customer.name}</td>
+                    <td>${customer.email}</td>
+                    <td>${customer.phone}</td>
+                    <td><span class="order-count">${customer.orders} orders</span></td>
+                    <td>${new Date(customer.joinDate).toLocaleDateString()}</td>
+                    <td>${customer.type === 'repeat' ? '🔄 Repeat' : '⭐ New'}</td>
+                    <td>
+                        <div class="action-buttons">
+                            <button class="btn-sm btn-view" onclick="viewCustomer('${customer.id}')">View</button>
+                            <button class="btn-sm btn-edit" onclick="editCustomer('${customer.id}')">Edit</button>
+                            <button class="btn-sm btn-delete" onclick="deleteCustomer('${customer.id}')">Delete</button>
+                        </div>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+
+        function filterCustomers() {
+            const search = document.getElementById('searchInput').value.toLowerCase();
+            const type = document.getElementById('typeFilter').value;
+
+            filteredCustomers = allCustomers.filter(customer => {
+                const matchesSearch = customer.name.toLowerCase().includes(search) || 
+                                     customer.phone.includes(search);
+                const matchesType = !type || customer.type === type;
+
+                return matchesSearch && matchesType;
+            });
+
+            loadCustomers();
+        }
+
+        function resetFilters() {
+            document.getElementById('searchInput').value = '';
+            document.getElementById('typeFilter').value = '';
+            filteredCustomers = [...allCustomers];
+            loadCustomers();
+        }
+
+        function viewCustomer(customerId) {
+            const customer = allCustomers.find(c => c.id === customerId);
+            if (!customer) return;
+
+            const content = document.getElementById('viewContent');
+            content.innerHTML = `
+                <div style="line-height: 1.8;">
+                    <p><strong>Name:</strong> ${customer.name}</p>
+                    <p><strong>Email:</strong> ${customer.email || 'Not provided'}</p>
+                    <p><strong>Phone:</strong> ${customer.phone}</p>
+                    <p><strong>Address:</strong> ${customer.address || 'Not provided'}</p>
+                    <p><strong>Join Date:</strong> ${new Date(customer.joinDate).toLocaleDateString()}</p>
+                    <p><strong>Total Orders:</strong> ${customer.orders}</p>
+                    <p><strong>Customer Type:</strong> ${customer.type === 'repeat' ? '🔄 Repeat Customer' : '⭐ New Customer'}</p>
+                </div>
+            `;
+            openModal('viewModal');
+        }
+
+        function editCustomer(customerId) {
+            const customer = allCustomers.find(c => c.id === customerId);
+            if (!customer) return;
+
+            currentEditCustomerId = customerId;
+            document.getElementById('editName').value = customer.name;
+            document.getElementById('editEmail').value = customer.email;
+            document.getElementById('editPhone').value = customer.phone;
+            document.getElementById('editAddress').value = customer.address;
+
+            openModal('editModal');
+        }
+
+        function deleteCustomer(customerId) {
+            if (!confirm('Are you sure you want to delete this customer?')) return;
+
+            allCustomers = allCustomers.filter(c => c.id !== customerId);
+            filteredCustomers = filteredCustomers.filter(c => c.id !== customerId);
+            loadCustomers();
+        }
+
+        document.getElementById('editForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const customer = allCustomers.find(c => c.id === currentEditCustomerId);
+            if (customer) {
+                customer.name = document.getElementById('editName').value;
+                customer.email = document.getElementById('editEmail').value;
+                customer.phone = document.getElementById('editPhone').value;
+                customer.address = document.getElementById('editAddress').value;
+
+                filterCustomers();
+                closeModal('editModal');
+                alert('Customer updated successfully!');
+            }
+        });
+
+        // Add event listeners
+        document.getElementById('searchInput').addEventListener('input', filterCustomers);
+        document.getElementById('typeFilter').addEventListener('change', filterCustomers);
+
+        // Initialize
+        window.addEventListener('load', initializePage);
+    </script>
+</body>
+</html>

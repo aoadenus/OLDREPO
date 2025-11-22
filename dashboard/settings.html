@@ -4,18 +4,24 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Settings - Emily Bakes Cakes</title>
-    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/dashboard-redesigned.css">
 </head>
 <body>
     <!-- HEADER -->
     <header class="header">
         <div class="header-left">
-            <div class="role-badge" id="staff-role">Staff</div>
-            <div class="manager-name" id="staff-name">Loading...</div>
+            <div class="header-logo">
+                <div class="logo-text">Emily Bakes Cakes</div>
+            </div>
+        </div>
+        <div class="header-center">
+            <div class="header-user">
+                <div class="role-badge" id="staff-role">Staff</div>
+                <div class="manager-name" id="staff-name">Loading...</div>
+            </div>
         </div>
         <div class="header-right">
-            <div class="pickup-badge" id="header-pickup-count">0 pickups today</div>
-            <button class="header-btn" onclick="backToSite()">Back to Site</button>
+            <button class="header-btn" onclick="backToSite()">← Back to Site</button>
             <button class="logout-btn header-btn" onclick="handleLogout()">Logout</button>
         </div>
     </header>
@@ -23,11 +29,11 @@
     <!-- LEFT NAVIGATION -->
     <nav class="nav-sidebar">
         <ul>
-            <li><a href="index.html" class="nav-link">Dashboard</a></li>
-            <li><a href="orders.html" class="nav-link">Orders</a></li>
-            <li><a href="customers.html" class="nav-link">Customers</a></li>
+            <li><a href="#" onclick="goToDashboard(); return false;" class="nav-link">Dashboard</a></li>
+            <li><a href="all-orders.html" class="nav-link">View Orders</a></li>
+            <li><a href="all-customers.html" class="nav-link">View Customers</a></li>
+            <li><a href="view-products.html" class="nav-link">View Products</a></li>
             <li><a href="reports.html" class="nav-link">Reports</a></li>
-            <li><a href="settings.html" class="nav-link active">Settings</a></li>
         </ul>
     </nav>
 
