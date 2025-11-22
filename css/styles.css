@@ -1162,7 +1162,7 @@ body {
     background: #F5F5F5;
 }
 
-/* Left Navigation Bar */
+/* Left Navigation Bar - WCAG Compliant Vertical Design */
 .staff-nav {
     width: 260px;
     background: linear-gradient(180deg, #2B2B2B 0%, #1A1A1A 100%);
@@ -1174,14 +1174,17 @@ body {
     box-shadow: 4px 0 20px rgba(0, 0, 0, 0.3);
     z-index: 100;
     overflow-y: auto;
+    display: flex;
+    flex-direction: column;
 }
 
 .nav-logo {
     padding: 30px 20px;
-    background: rgba(196, 69, 105, 0.1);
+    background: rgba(196, 69, 105, 0.15);
     border-bottom: 3px solid var(--raspberry);
-    margin-bottom: 10px;
+    margin-bottom: 0;
     text-align: center;
+    flex-shrink: 0;
 }
 
 .nav-logo h2 {
@@ -1191,6 +1194,7 @@ body {
     margin-bottom: 8px;
     font-weight: 700;
     letter-spacing: 0.5px;
+    line-height: 1.3;
 }
 
 .nav-subtitle {
@@ -1200,31 +1204,55 @@ body {
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 1.5px;
+    line-height: 1.5;
 }
 
 .nav-menu {
     list-style: none;
     padding: 20px 10px;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
 }
 
 .nav-menu li {
-    margin-bottom: 8px;
+    margin-bottom: 0;
+    width: 100%;
 }
 
 .nav-menu .nav-link {
     display: flex;
+    flex-direction: row;
     align-items: center;
     gap: 14px;
-    padding: 14px 18px;
-    color: rgba(255, 255, 255, 0.7);
+    padding: 16px 20px;
+    color: rgba(255, 255, 255, 0.85);
+    background: transparent;
     text-decoration: none;
     font-family: 'Poppins', sans-serif;
-    font-size: 14px;
+    font-size: 15px;
     font-weight: 500;
     transition: all 0.3s ease;
     border-radius: 10px;
     position: relative;
     overflow: hidden;
+    width: 100%;
+    box-sizing: border-box;
+    /* WCAG Focus States */
+    outline: none;
+}
+
+/* WCAG 2.1 AA Compliant Focus Indicator */
+.nav-menu .nav-link:focus {
+    outline: 3px solid #FFFFFF;
+    outline-offset: -3px;
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.nav-menu .nav-link:focus-visible {
+    outline: 3px solid #FFFFFF;
+    outline-offset: -3px;
 }
 
 .nav-menu .nav-link::before {
@@ -1240,9 +1268,10 @@ body {
 }
 
 .nav-menu .nav-link:hover {
-    background: rgba(255, 255, 255, 0.05);
+    background: rgba(255, 255, 255, 0.08);
     color: white;
-    padding-left: 24px;
+    padding-left: 26px;
+    transform: translateX(2px);
 }
 
 .nav-menu .nav-link:hover::before {
@@ -1250,20 +1279,40 @@ body {
 }
 
 .nav-menu .nav-link.active {
-    background: linear-gradient(90deg, rgba(196, 69, 105, 0.3) 0%, rgba(196, 69, 105, 0.1) 100%);
+    background: linear-gradient(90deg, rgba(196, 69, 105, 0.35) 0%, rgba(196, 69, 105, 0.12) 100%);
     color: white;
-    padding-left: 24px;
+    padding-left: 26px;
     box-shadow: 0 4px 12px rgba(196, 69, 105, 0.3);
+    font-weight: 600;
 }
 
 .nav-menu .nav-link.active::before {
     transform: scaleY(1);
 }
 
+/* WCAG Compliant Icon Sizing */
 .nav-icon {
     font-size: 20px;
     width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
     text-align: center;
+}
+
+/* Screen Reader Only Content for Accessibility */
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
 }
 
 /* Main Content Area */
