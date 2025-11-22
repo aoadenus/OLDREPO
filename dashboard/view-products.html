@@ -829,8 +829,12 @@
 
     <script src="js/main.js"></script>
     <script>
+        let productsData = null;
+
         document.addEventListener('DOMContentLoaded', () => {
             loadUserInfo();
+            loadProductsData();
+            renderDynamicProducts();
         });
 
         function loadUserInfo() {
@@ -838,6 +842,90 @@
             const userName = localStorage.getItem('userName') || 'Guest User';
             document.getElementById('staff-role').textContent = userRole;
             document.getElementById('staff-name').textContent = userName;
+        }
+
+        function loadProductsData() {
+            const stored = localStorage.getItem('productsData');
+            if (stored) {
+                productsData = JSON.parse(stored);
+            }
+        }
+
+        function renderDynamicProducts() {
+            if (!productsData) return; // Use hardcoded HTML if no data
+
+            // Render Standard Cakes
+            const cakesGrid = document.querySelector('#standard-cakes .products-grid');
+            if (cakesGrid && productsData.standardCakes && productsData.standardCakes.length > 0) {
+                cakesGrid.innerHTML = productsData.standardCakes.map(cake => `
+                    <div class="product-card">
+                        <div class="product-image" style="background-image: url('${cake.image || '../public/ebc-cake-images/Birthday.png'}');"></div>
+                        <div class="product-info">
+                            <h3 class="product-name">${cake.name}</h3>
+                            <p class="product-desc">${cake.description}</p>
+                        </div>
+                    </div>
+                `).join('');
+            }
+
+            // Render Cake Flavors
+            const flavorsGrid = document.querySelector('#cake-flavors .products-grid');
+            if (flavorsGrid && productsData.cakeFlavors && productsData.cakeFlavors.length > 0) {
+                flavorsGrid.innerHTML = productsData.cakeFlavors.map(flavor => `
+                    <div class="product-card">
+                        <div class="product-info" style="padding: 30px 20px;">
+                            <h3 class="product-name">${flavor.name}</h3>
+                            <p class="product-desc">${flavor.description}</p>
+                        </div>
+                    </div>
+                `).join('');
+            }
+
+            // Render Icing Flavors
+            const icingContainer = document.querySelector('#icing-flavors .options-list');
+            if (icingContainer && productsData.icingFlavors && productsData.icingFlavors.length > 0) {
+                icingContainer.innerHTML = '<ul>' + productsData.icingFlavors.map(icing => 
+                    `<li><strong>${icing.name}</strong> - ${icing.description}</li>`
+                ).join('') + '</ul>';
+            }
+
+            // Render Fillings
+            const fillingsContainer = document.querySelector('#fillings .options-list');
+            if (fillingsContainer && productsData.fillings && productsData.fillings.length > 0) {
+                fillingsContainer.innerHTML = '<ul>' + productsData.fillings.map(filling => 
+                    `<li><strong>${filling.name}</strong> - ${filling.description}</li>`
+                ).join('') + '</ul>';
+            }
+
+            // Render Icing Colors
+            const colorsContainer = document.querySelector('#icing-colors .colors-grid');
+            if (colorsContainer && productsData.icingColors && productsData.icingColors.length > 0) {
+                colorsContainer.innerHTML = productsData.icingColors.map(color => `
+                    <div class="color-option">
+                        <div class="color-circle" style="background-color: ${color.hex};"></div>
+                        <span class="color-name">${color.name}</span>
+                    </div>
+                `).join('');
+            }
+
+            // Render Decorations (group by category)
+            const decorationsContainer = document.querySelector('#decorations .decorations-list');
+            if (decorationsContainer && productsData.decorations && productsData.decorations.length > 0) {
+                const grouped = {};
+                productsData.decorations.forEach(dec => {
+                    if (!grouped[dec.category]) grouped[dec.category] = [];
+                    grouped[dec.category].push(dec);
+                });
+
+                decorationsContainer.innerHTML = Object.keys(grouped).map(category => `
+                    <div class="decoration-category">
+                        <h3>${category}</h3>
+                        <ul>
+                            ${grouped[category].map(dec => `<li>${dec.name}</li>`).join('')}
+                        </ul>
+                    </div>
+                `).join('');
+            }
         }
 
         function switchTab(event, tabName) {
