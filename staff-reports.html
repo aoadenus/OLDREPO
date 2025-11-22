@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reports - Emily Bakes Cakes Staff</title>
+    <link rel="stylesheet" href="css/styles.css?v=2.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;800&family=Poppins:wght@400;500;600;700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        .reports-header {
+            margin-bottom: 40px;
+        }
+        .reports-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 36px;
+            color: var(--charcoal);
+            margin: 0 0 10px 0;
+        }
+        .reports-subtitle {
+            font-family: 'Open Sans', sans-serif;
+            font-size: 16px;
+            color: var(--gray);
+            margin: 0;
+        }
+        .coming-soon-container {
+            background: linear-gradient(135deg, #FAF5F0 0%, #FFFFFF 100%);
+            border-radius: 16px;
+            padding: 60px 40px;
+            text-align: center;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            margin-bottom: 40px;
+        }
+        .coming-soon-icon {
+            font-size: 80px;
+            margin-bottom: 20px;
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        .coming-soon-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 32px;
+            color: var(--raspberry);
+            margin-bottom: 15px;
+        }
+        .coming-soon-text {
+            font-family: 'Open Sans', sans-serif;
+            font-size: 16px;
+            color: var(--gray);
+            max-width: 600px;
+            margin: 0 auto 30px;
+            line-height: 1.6;
+        }
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+        .feature-card {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s;
+            border-top: 4px solid var(--gray);
+        }
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+        }
+        .feature-card.revenue {
+            border-top-color: var(--green);
+        }
+        .feature-card.analytics {
+            border-top-color: var(--blue);
+        }
+        .feature-card.customers {
+            border-top-color: var(--purple);
+        }
+        .feature-card.inventory {
+            border-top-color: var(--amber);
+        }
+        .feature-card.performance {
+            border-top-color: var(--raspberry);
+        }
+        .feature-card.trends {
+            border-top-color: #10B981;
+        }
+        .feature-icon {
+            font-size: 48px;
+            margin-bottom: 15px;
+        }
+        .feature-title {
+            font-family: 'Poppins', sans-serif;
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--charcoal);
+            margin-bottom: 10px;
+        }
+        .feature-description {
+            font-family: 'Open Sans', sans-serif;
+            font-size: 14px;
+            color: var(--gray);
+            line-height: 1.5;
+        }
+        .timeline-section {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        }
+        .timeline-title {
+            font-family: 'Poppins', sans-serif;
+            font-size: 22px;
+            font-weight: 600;
+            color: var(--charcoal);
+            margin-bottom: 25px;
+        }
+        .timeline-item {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 20px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #E5E7EB;
+        }
+        .timeline-item:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+        .timeline-status {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            flex-shrink: 0;
+        }
+        .timeline-status.planned {
+            background: #DBEAFE;
+        }
+        .timeline-status.progress {
+            background: #FEF3C7;
+        }
+        .timeline-status.complete {
+            background: #D1FAE5;
+        }
+        .timeline-content {
+            flex: 1;
+        }
+        .timeline-phase {
+            font-family: 'Poppins', sans-serif;
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--charcoal);
+            margin-bottom: 5px;
+        }
+        .timeline-desc {
+            font-family: 'Open Sans', sans-serif;
+            font-size: 14px;
+            color: var(--gray);
+            line-height: 1.5;
+        }
+        .badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-family: 'Poppins', sans-serif;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            margin-top: 5px;
+        }
+        .badge-planned {
+            background: #DBEAFE;
+            color: #1E40AF;
+        }
+        .badge-progress {
+            background: #FEF3C7;
+            color: #92400E;
+        }
+        .badge-complete {
+            background: #D1FAE5;
+            color: #065F46;
+        }
+    </style>
+</head>
+<body class="staff-body">
+    <!-- Left Navigation Bar -->
+    <nav class="staff-nav">
+        <div class="nav-logo">
+            <picture>
+                <source srcset="/public/ebc-cake-images/logo.png" type="image/png">
+                <img src="/public/ebc-cake-images/logo.svg" alt="Emily Bakes Cakes logo">
+            </picture>
+            <h2>Emily Bakes Cakes</h2>
+            <p class="nav-subtitle">Staff Portal</p>
+        </div>
+        <ul class="nav-menu">
+            <li><a href="dashboard.html" class="nav-link">
+                <span class="nav-icon">📊</span>
+                <span>Dashboard</span>
+            </a></li>
+            <li><a href="staff-orders.html" class="nav-link">
+                <span class="nav-icon">📋</span>
+                <span>Orders</span>
+            </a></li>
+            <li><a href="staff-customers.html" class="nav-link">
+                <span class="nav-icon">👥</span>
+                <span>Customers</span>
+            </a></li>
+            <li><a href="staff-reports.html" class="nav-link active">
+                <span class="nav-icon">📈</span>
+                <span>Reports</span>
+            </a></li>
+            <li><a href="staff-settings.html" class="nav-link">
+                <span class="nav-icon">⚙️</span>
+                <span>Settings</span>
+            </a></li>
+        </ul>
+    </nav>
+
+    <!-- Main Content Area -->
+    <div class="staff-main">
+        <!-- Header Bar -->
+        <header class="staff-header">
+            <div class="header-left">
+                <h1 class="welcome-text" id="staffName">Welcome, Staff Member</h1>
+                <p class="role-text" id="staffRole">Staff</p>
+            </div>
+            <div class="header-right">
+                <span class="pickup-badge" id="pickupBadge">5 Pickups Today</span>
+                <a href="index.html" class="back-link">Back to Site</a>
+                <button class="logout-btn" onclick="logout()">Logout</button>
+            </div>
+        </header>
+
+        <!-- Page Content -->
+        <div class="dashboard-content">
+            <div class="reports-header">
+                <h1 class="reports-title">Reports & Analytics</h1>
+                <p class="reports-subtitle">Comprehensive insights and data visualization coming soon</p>
+            </div>
+
+            <!-- Coming Soon Banner -->
+            <div class="coming-soon-container">
+                <div class="coming-soon-icon">📊</div>
+                <h2 class="coming-soon-title">Advanced Reporting Coming Soon!</h2>
+                <p class="coming-soon-text">
+                    We're building a powerful analytics platform to help you make data-driven decisions.
+                    Track sales trends, customer behavior, inventory levels, and team performance all in one place.
+                </p>
+            </div>
+
+            <!-- Planned Features -->
+            <div class="feature-grid">
+                <div class="feature-card revenue">
+                    <div class="feature-icon">💰</div>
+                    <h3 class="feature-title">Revenue Reports</h3>
+                    <p class="feature-description">
+                        Track daily, weekly, and monthly revenue with detailed breakdowns by product type and customer segment.
+                    </p>
+                </div>
+
+                <div class="feature-card analytics">
+                    <div class="feature-icon">📈</div>
+                    <h3 class="feature-title">Sales Analytics</h3>
+                    <p class="feature-description">
+                        Visualize sales trends, peak hours, and seasonal patterns with interactive charts and graphs.
+                    </p>
+                </div>
+
+                <div class="feature-card customers">
+                    <div class="feature-icon">👥</div>
+                    <h3 class="feature-title">Customer Insights</h3>
+                    <p class="feature-description">
+                        Analyze customer retention, loyalty tiers, and purchasing behavior to improve marketing strategies.
+                    </p>
+                </div>
+
+                <div class="feature-card inventory">
+                    <div class="feature-icon">📦</div>
+                    <h3 class="feature-title">Inventory Reports</h3>
+                    <p class="feature-description">
+                        Monitor ingredient usage, waste metrics, and inventory turnover to optimize stock levels.
+                    </p>
+                </div>
+
+                <div class="feature-card performance">
+                    <div class="feature-icon">⭐</div>
+                    <h3 class="feature-title">Team Performance</h3>
+                    <p class="feature-description">
+                        Evaluate staff productivity, order completion times, and individual performance metrics.
+                    </p>
+                </div>
+
+                <div class="feature-card trends">
+                    <div class="feature-icon">🎯</div>
+                    <h3 class="feature-title">Market Trends</h3>
+                    <p class="feature-description">
+                        Identify emerging trends, popular flavors, and seasonal demand to plan production effectively.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Development Timeline -->
+            <div class="timeline-section">
+                <h3 class="timeline-title">Development Roadmap</h3>
+
+                <div class="timeline-item">
+                    <div class="timeline-status complete">✅</div>
+                    <div class="timeline-content">
+                        <div class="timeline-phase">Phase 1: Foundation</div>
+                        <div class="timeline-desc">
+                            Core dashboard setup, user authentication, and basic order management system.
+                        </div>
+                        <span class="badge badge-complete">Completed</span>
+                    </div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-status progress">🔄</div>
+                    <div class="timeline-content">
+                        <div class="timeline-phase">Phase 2: Data Collection</div>
+                        <div class="timeline-desc">
+                            Implementing comprehensive data tracking for orders, customers, and inventory movements.
+                        </div>
+                        <span class="badge badge-progress">In Progress</span>
+                    </div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-status planned">📅</div>
+                    <div class="timeline-content">
+                        <div class="timeline-phase">Phase 3: Analytics Engine</div>
+                        <div class="timeline-desc">
+                            Building the analytics engine with real-time data processing and visualization capabilities.
+                        </div>
+                        <span class="badge badge-planned">Q1 2026</span>
+                    </div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-status planned">📅</div>
+                    <div class="timeline-content">
+                        <div class="timeline-phase">Phase 4: Advanced Features</div>
+                        <div class="timeline-desc">
+                            Adding predictive analytics, automated reports, custom dashboards, and export capabilities.
+                        </div>
+                        <span class="badge badge-planned">Q2 2026</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/dashboard.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const user = localStorage.getItem('staffUser');
+            if (!user) {
+                window.location.href = 'staff-login.html';
+                return;
+            }
+
+            const role = localStorage.getItem('staffRole') || 'staff';
+            updateHeader(role);
+        });
+
+        function updateHeader(role) {
+            const roleNames = {
+                manager: { name: 'Sarah Johnson', title: 'Manager' },
+                sales: { name: 'Sarah Johnson', title: 'Sales Staff' },
+                baker: { name: 'Mike Baker', title: 'Baker' },
+                decorator: { name: 'Lisa Artiste', title: 'Decorator' },
+                accountant: { name: 'John Numbers', title: 'Accountant' }
+            };
+            const roleData = roleNames[role] || { name: 'Staff Member', title: 'Staff' };
+            document.getElementById('staffName').textContent = `Welcome, ${roleData.name}`;
+            document.getElementById('staffRole').textContent = roleData.title;
+            document.getElementById('pickupBadge').style.display = 'none';
+        }
+
+        function logout() {
+            localStorage.removeItem('staffUser');
+            localStorage.removeItem('staffRole');
+            window.location.href = 'staff-login.html';
+        }
+    </script>
+</body>
+</html>

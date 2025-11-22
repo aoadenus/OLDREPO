@@ -11,14 +11,11 @@ echo.
 echo Starting server using Python...
 echo.
 
-REM Try Python 3
-python -m http.server 8000 >nul 2>&1
+REM Check for Python 3 without starting a blocking server
+python --version >nul 2>&1
 if %errorlevel% equ 0 (
     echo.
-    echo Server is running!
-    echo.
-    echo Access the website at:
-    echo http://localhost:8000
+    echo Starting Python 3 HTTP server on http://localhost:8000
     echo.
     echo Staff Login Demo:
     echo http://localhost:8000/staff-login.html
@@ -27,18 +24,15 @@ if %errorlevel% equ 0 (
     echo.
     echo Press Ctrl+C to stop the server
     echo.
-    python -m http.server 8000
+    python -m http.server 8000 --bind 127.0.0.1
     exit /b
 )
 
-REM Try Python 2
-python -m SimpleHTTPServer 8000 >nul 2>&1
+REM Check for Python 2
+python -V >nul 2>&1
 if %errorlevel% equ 0 (
     echo.
-    echo Server is running!
-    echo.
-    echo Access the website at:
-    echo http://localhost:8000
+    echo Starting Python 2 SimpleHTTPServer on http://localhost:8000
     echo.
     echo Staff Login Demo:
     echo http://localhost:8000/staff-login.html

@@ -1,11 +1,11 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Manager Dashboard - Emily Bakes Cakes</title>
+    <title>Sales Dashboard - Emily Bakes Cakes</title>
     <link rel="stylesheet" href="css/dashboard-redesigned.css?v=20251122">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
     <script src="js/ux-enhancements.js"></script>
     <style>
         /* Professional Header Customization */
@@ -29,7 +29,7 @@
             justify-content: flex-end;
         }
 
-        /* Additional styles for manager dashboard layout */
+        /* Additional styles for Sales Dashboard layout */
 
         /* KPIs at top */
         .kpi-row {
@@ -66,57 +66,85 @@
         }
 
         .chart-container {
-            height: 160px;
+            height: 200px;
             position: relative;
         }
 
-        /* Quick Action Buttons Bar - Compact & Offset */
-        .quick-actions-bar {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 8px;
-            margin-bottom: 10px;
-            margin-top: 14px;
-        }
-
-        .action-btn {
+        /* Quick actions moved to left sidebar */
+        .quick-actions-sidebar {
+            position: fixed;
+            left: 200px;
+            top: 76px;
+            width: 150px;
             display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 5px;
-            padding: 6px 10px;
-            background: white;
-            border: 2px solid #E5E7EB;
-            border-radius: 5px;
+            flex-direction: column;
+            gap: 8px;
+            z-index: 10;
+        }
+
+        .quick-action-btn {
+            padding: 10px 12px;
+            background: var(--bg-white);
+            border: 2px solid var(--border-light);
+            border-radius: 8px;
             text-decoration: none;
-            color: #374151;
+            color: var(--text-primary);
             font-weight: 600;
-            font-size: 11px;
+            text-align: center;
             transition: all 0.2s;
-            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.12);
+            font-size: 12px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
         }
 
-        .action-btn:hover {
-            border-color: #C44569;
-            background: #FDF2F8;
-            transform: translateY(-1px);
-            box-shadow: 0 3px 10px rgba(196, 69, 105, 0.2);
+        .quick-action-btn:hover {
+            border-color: var(--primary);
+            background: rgba(196, 69, 105, 0.05);
+            transform: translateX(4px);
         }
 
-        .action-btn.primary {
-            background: linear-gradient(135deg, #C44569, #9A3350);
+        .quick-action-btn.primary {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
             color: white;
             border-color: transparent;
-            box-shadow: 0 2px 6px rgba(196, 69, 105, 0.25);
+            box-shadow: var(--shadow-lg);
         }
 
-        .action-btn.primary:hover {
-            background: linear-gradient(135deg, #A33555, #7A2741);
-            box-shadow: 0 3px 10px rgba(196, 69, 105, 0.4);
+        .quick-action-btn.primary:hover {
+            box-shadow: 0 6px 16px rgba(196, 69, 105, 0.4);
         }
 
-        .action-icon {
-            font-size: 14px;
+        .quick-action-btn.secondary {
+            background: linear-gradient(135deg, var(--success), #059669);
+            color: white;
+            border-color: transparent;
+            box-shadow: var(--shadow-lg);
+        }
+
+        .quick-action-btn.secondary:hover {
+            box-shadow: 0 6px 16px rgba(16, 185, 129, 0.4);
+        }
+
+        .quick-action-icon {
+            font-size: 20px;
+        }
+
+        .quick-action-text {
+            font-size: 11px;
+        }
+
+        /* Adjust main content to accommodate sidebar */
+        .main-content {
+            margin-left: 350px !important;
+            padding-left: 0px !important;
+            padding-right: 20px !important;
+        }
+
+        .main-content .content {
+            margin-left: 0 !important;
+            padding-left: 0 !important;
         }
 
         .schedule-section {
@@ -239,6 +267,12 @@
                 <div class="logo-text">Emily Bakes Cakes</div>
             </div>
         </div>
+        <div class="header-center">
+            <div class="header-user">
+                <div class="role-badge" id="staff-role">SALES</div>
+                <div class="SALES-name" id="staff-name">SALES</div>
+            </div>
+        </div>
         <div class="header-right">
             <button class="header-btn" onclick="backToSite()">← Back to Site</button>
             <button class="logout-btn header-btn" onclick="handleLogout()">Logout</button>
@@ -248,13 +282,33 @@
     <!-- LEFT NAVIGATION -->
     <nav class="nav-sidebar">
         <ul>
-            <li><a href="manager-dashboard.html" class="nav-link active">Dashboard</a></li>
+            <li><a href="SALES-dashboard.html" class="nav-link active">Dashboard</a></li>
             <li><a href="all-orders.html" class="nav-link">View Orders</a></li>
             <li><a href="all-customers.html" class="nav-link">View Customers</a></li>
             <li><a href="view-products.html" class="nav-link">View Products</a></li>
             <li><a href="reports.html" class="nav-link">Reports</a></li>
         </ul>
     </nav>
+
+    <!-- QUICK ACTIONS SIDEBAR (LEFT) -->
+    <div class="quick-actions-sidebar">
+        <a href="../order-form.html" class="quick-action-btn primary">
+            <span class="quick-action-icon">📝</span>
+            <span class="quick-action-text">Create New Order</span>
+        </a>
+        <a href="new-customer.html" class="quick-action-btn secondary">
+            <span class="quick-action-icon">👤</span>
+            <span class="quick-action-text">Add Customer</span>
+        </a>
+        <a href="all-orders.html" class="quick-action-btn">
+            <span class="quick-action-icon">📋</span>
+            <span class="quick-action-text">View Orders</span>
+        </a>
+        <a href="reports.html" class="quick-action-btn">
+            <span class="quick-action-icon">📊</span>
+            <span class="quick-action-text">View Reports</span>
+        </a>
+    </div>
 
     <!-- MAIN CONTENT -->
     <main class="main-content">
@@ -281,26 +335,6 @@
                     <div class="kpi-label">New Customers</div>
                     <a href="all-customers.html" class="kpi-link">View All →</a>
                 </div>
-            </div>
-
-            <!-- QUICK ACTIONS BAR -->
-            <div class="quick-actions-bar">
-                <a href="../order-form.html" class="action-btn primary">
-                    <span class="action-icon">➕</span>
-                    <span>Create New Order</span>
-                </a>
-                <a href="new-customer.html" class="action-btn">
-                    <span class="action-icon">👤</span>
-                    <span>Add Customer</span>
-                </a>
-                <a href="all-orders.html" class="action-btn">
-                    <span class="action-icon">📋</span>
-                    <span>View Orders</span>
-                </a>
-                <a href="reports.html" class="action-btn">
-                    <span class="action-icon">📊</span>
-                    <span>View Reports</span>
-                </a>
             </div>
 
             <!-- CHARTS SECTION (BELOW KPIs) -->
@@ -416,7 +450,7 @@
         }
 
         function updateHeaderWithUserInfo() {
-            const staffName = localStorage.getItem('staffName') || 'Manager';
+            const staffName = localStorage.getItem('staffName') || 'SALES';
             document.getElementById('staff-name').textContent = staffName;
             // Role badge is already set in HTML
         }
@@ -483,10 +517,10 @@
             if (!checkAuthentication()) return;
             updateHeaderWithUserInfo();
             initializeNav();
-            initializeManagerDashboard();
+            initializeSALESDashboard();
         });
 
-        function initializeManagerDashboard() {
+        function initializeSALESDashboard() {
             // Update KPIs
             document.getElementById('pending-pickup-count').textContent = getTodaysPickups().length;
             document.getElementById('todays-orders-count').textContent = dashboardData.orders.length;
@@ -722,3 +756,4 @@
     </div>
 </body>
 </html>
+

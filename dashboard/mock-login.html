@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Dashboard Login Bypass</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background: linear-gradient(135deg, #C44569, #F8EBD7);
+        }
+        .container {
+            background: white;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            text-align: center;
+            max-width: 400px;
+        }
+        h1 {
+            color: #C44569;
+            margin-bottom: 20px;
+        }
+        .status {
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 8px;
+            font-weight: bold;
+            background: #d1fae5;
+            color: #065f46;
+        }
+        .links {
+            margin-top: 30px;
+        }
+        .link-btn {
+            display: block;
+            padding: 12px 24px;
+            margin: 10px 0;
+            background: #C44569;
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+        .link-btn:hover {
+            background: #A33555;
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔓 Mock Authentication Setup</h1>
+        <div class="status" id="status">Setting up mock authentication...</div>
+        
+        <div class="links" id="links" style="display: none;">
+            <p>Choose a dashboard to test:</p>
+            <a href="manager-dashboard.html" class="link-btn">Manager Dashboard</a>
+            <a href="baker-dashboard.html" class="link-btn">Baker Dashboard</a>
+            <a href="decorator-dashboard.html" class="link-btn">Decorator Dashboard</a>
+            <a href="sales-dashboard.html" class="link-btn">Sales Dashboard</a>
+            <a href="accountant-dashboard.html" class="link-btn">Accountant Dashboard</a>
+            <a href="test-charts.html" class="link-btn">Test Charts (No Auth)</a>
+        </div>
+    </div>
+    
+    <script>
+        // Set mock authentication data
+        localStorage.setItem('staffUser', 'Test User');
+        localStorage.setItem('staffRole', 'MANAGER');
+        localStorage.setItem('staffName', 'Test Manager');
+        
+        // Update status
+        document.getElementById('status').innerHTML = '✅ Mock authentication set!<br><small>You can now access all dashboards</small>';
+        
+        // Show links
+        document.getElementById('links').style.display = 'block';
+        
+        console.log('Mock authentication data set:');
+        console.log('- staffUser:', localStorage.getItem('staffUser'));
+        console.log('- staffRole:', localStorage.getItem('staffRole'));
+        console.log('- staffName:', localStorage.getItem('staffName'));
+    </script>
+</body>
+</html>

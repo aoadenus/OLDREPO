@@ -1,0 +1,708 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Products - Emily Bakes Cakes Staff</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;800&family=Poppins:wght@400;500;600;700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            display: flex;
+            margin: 0;
+            padding: 0;
+        }
+
+        .auth-required {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            width: 100%;
+            background: linear-gradient(135deg, #C44569 0%, #F8EBD7 100%);
+        }
+
+        .auth-message {
+            background: white;
+            padding: 40px;
+            border-radius: 12px;
+            text-align: center;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            max-width: 400px;
+        }
+
+        .auth-message h2 {
+            color: #C44569;
+            margin-bottom: 15px;
+        }
+
+        .auth-message p {
+            color: #5A3825;
+            margin-bottom: 20px;
+        }
+
+        .auth-message a {
+            display: inline-block;
+            background: #C44569;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .auth-message a:hover {
+            background: #D45579;
+            transform: translateY(-2px);
+        }
+
+        .staff-dashboard {
+            display: flex;
+            width: 100%;
+            min-height: 100vh;
+        }
+
+        .sidebar {
+            width: 280px;
+            background: #2B2B2B;
+            color: white;
+            padding: 30px 20px;
+            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+            position: fixed;
+            left: 0;
+            top: 0;
+            height: 100vh;
+            overflow-y: auto;
+        }
+
+        .sidebar-header {
+            text-align: center;
+            margin-bottom: 40px;
+            border-bottom: 2px solid #C44569;
+            padding-bottom: 20px;
+        }
+
+        .sidebar-header h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 22px;
+            margin: 0 0 5px 0;
+            color: white;
+        }
+
+        .sidebar-header p {
+            font-size: 12px;
+            color: #C44569;
+            margin: 0;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .sidebar-nav {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .sidebar-nav li {
+            margin-bottom: 5px;
+        }
+
+        .sidebar-nav a {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 15px;
+            color: #ccc;
+            text-decoration: none;
+            border-radius: 6px;
+            transition: all 0.3s;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 500;
+            font-size: 14px;
+        }
+
+        .sidebar-nav a:hover {
+            background: rgba(196, 69, 105, 0.2);
+            color: #C44569;
+            padding-left: 20px;
+        }
+
+        .sidebar-nav a.active {
+            background: rgba(196, 69, 105, 0.3);
+            color: #C44569;
+            border-left: 3px solid #C44569;
+            padding-left: 12px;
+        }
+
+        .sidebar-nav svg {
+            width: 20px;
+            height: 20px;
+            flex-shrink: 0;
+        }
+
+        .logout-btn {
+            margin-top: auto;
+            width: 100%;
+            padding: 12px;
+            background: #C44569;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .logout-btn:hover {
+            background: #D45579;
+        }
+
+        .main-content {
+            margin-left: 280px;
+            flex: 1;
+            padding: 40px 20px;
+        }
+
+        .products-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .products-header h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 36px;
+            color: #2B2B2B;
+            margin: 0;
+        }
+
+        .manager-controls {
+            display: none;
+            gap: 10px;
+        }
+
+        .manager-controls.active {
+            display: flex;
+        }
+
+        .btn-add-product,
+        .btn-edit,
+        .btn-delete,
+        .btn-save,
+        .btn-cancel {
+            padding: 10px 16px;
+            border-radius: 6px;
+            border: none;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 14px;
+        }
+
+        .btn-add-product {
+            background: #C44569;
+            color: white;
+        }
+
+        .btn-add-product:hover {
+            background: #D45579;
+            transform: translateY(-2px);
+        }
+
+        .btn-edit {
+            background: #4CAF50;
+            color: white;
+            font-size: 12px;
+        }
+
+        .btn-edit:hover {
+            background: #45a049;
+        }
+
+        .btn-delete {
+            background: #f44336;
+            color: white;
+            font-size: 12px;
+        }
+
+        .btn-delete:hover {
+            background: #da190b;
+        }
+
+        .btn-save {
+            background: #4CAF50;
+            color: white;
+        }
+
+        .btn-save:hover {
+            background: #45a049;
+        }
+
+        .btn-cancel {
+            background: #999;
+            color: white;
+        }
+
+        .btn-cancel:hover {
+            background: #777;
+        }
+
+        .product-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+
+        .product-card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            transition: all 0.3s;
+            position: relative;
+        }
+
+        .product-card:hover {
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+            transform: translateY(-5px);
+        }
+
+        .product-image {
+            width: 100%;
+            height: 200px;
+            background-size: cover;
+            background-position: center;
+            border-bottom: 3px solid #F8EBD7;
+        }
+
+        .product-content {
+            padding: 20px;
+        }
+
+        .product-name {
+            font-family: 'Playfair Display', serif;
+            font-size: 18px;
+            color: #2B2B2B;
+            margin: 0 0 8px 0;
+        }
+
+        .product-description {
+            color: #5A3825;
+            font-size: 14px;
+            margin: 0 0 12px 0;
+            line-height: 1.4;
+        }
+
+        .product-price {
+            font-size: 16px;
+            font-weight: 700;
+            color: #C44569;
+            margin-bottom: 15px;
+        }
+
+        .product-actions {
+            display: none;
+            gap: 8px;
+        }
+
+        .product-actions.active {
+            display: flex;
+        }
+
+        .manager-edit-form {
+            display: none;
+            background: #F8EBD7;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 15px;
+        }
+
+        .manager-edit-form.active {
+            display: block;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+            color: #2B2B2B;
+            font-size: 13px;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 8px;
+            border: 2px solid #D0B5A0;
+            border-radius: 6px;
+            font-family: 'Open Sans', sans-serif;
+            font-size: 13px;
+            box-sizing: border-box;
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 60px;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #C44569;
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .role-badge {
+            display: inline-block;
+            padding: 6px 12px;
+            background: #2B2B2B;
+            color: white;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 100%;
+                height: auto;
+                position: relative;
+            }
+
+            .main-content {
+                margin-left: 0;
+            }
+
+            .products-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .product-cards {
+                grid-template-columns: 1fr;
+            }
+
+            .products-header h1 {
+                font-size: 28px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Auth Required Message (shown if not logged in) -->
+    <div class="auth-required" id="authRequired" style="display: none;">
+        <div class="auth-message">
+            <h2>Access Denied</h2>
+            <p>You must be logged in to view this page.</p>
+            <a href="staff-login.html">Go to Staff Login</a>
+        </div>
+    </div>
+
+    <!-- Staff Dashboard (shown if logged in) -->
+    <div class="staff-dashboard" id="staffDashboard" style="display: none;">
+        <!-- Sidebar Navigation -->
+        <div class="sidebar">
+            <div class="sidebar-header">
+                    <picture>
+                        <source srcset="/public/ebc-cake-images/logo.png" type="image/png">
+                        <img src="/public/ebc-cake-images/logo.svg" alt="Emily Bakes Cakes logo">
+                    </picture>
+                    <h2>Emily Bakes Cakes</h2>
+                <p>Staff Portal</p>
+            </div>
+
+            <ul class="sidebar-nav">
+                <li>
+                    <a href="staff-login.html">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                            <polyline points="9 22 9 12 15 12 15 22"></polyline>
+                        </svg>
+                        Dashboard
+                    </a>
+                </li>
+                <li>
+                    <a href="staff-orders.html">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                            <line x1="16" y1="2" x2="16" y2="6"></line>
+                            <line x1="8" y1="2" x2="8" y2="6"></line>
+                            <line x1="3" y1="10" x2="21" y2="10"></line>
+                        </svg>
+                        Orders
+                    </a>
+                </li>
+                <li>
+                    <a href="staff-customers.html">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                            <circle cx="9" cy="7" r="4"></circle>
+                            <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                            <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                        </svg>
+                        Customers
+                    </a>
+                </li>
+                <li>
+                    <a href="staff-products.html" class="active">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="9" cy="21" r="1"></circle>
+                            <circle cx="20" cy="21" r="1"></circle>
+                            <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+                        </svg>
+                        Products
+                    </a>
+                </li>
+                <li>
+                    <a href="staff-reports.html">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="12" y1="2" x2="12" y2="22"></line>
+                            <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+                        </svg>
+                        Reports
+                    </a>
+                </li>
+                <li style="margin-top: auto;">
+                    <button class="logout-btn" onclick="handleLogout()">Logout</button>
+                </li>
+            </ul>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <div class="products-header">
+                <h1>Products</h1>
+                <div class="manager-controls" id="managerControls">
+                    <button class="btn-add-product" onclick="addNewProduct()">+ Add Product</button>
+                </div>
+            </div>
+
+            <div id="roleIndicator" style="margin-bottom: 20px;"></div>
+
+            <div class="product-cards" id="productCards">
+                <!-- Products will be populated here by JavaScript -->
+            </div>
+        </div>
+    </div>
+
+    <script src="data.js"></script>
+    <script>
+        let currentRole = 'staff';
+        let editingProductId = null;
+
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', function() {
+            // Get role from URL parameter or localStorage
+            const urlParams = new URLSearchParams(window.location.search);
+            const roleParam = urlParams.get('role');
+            const storedRole = localStorage.getItem('staffRole');
+            const storedUser = localStorage.getItem('staffUser');
+            
+            // Check if user is authenticated
+            if (!storedUser) {
+                document.getElementById('authRequired').style.display = 'flex';
+                document.getElementById('staffDashboard').style.display = 'none';
+                return;
+            }
+
+            // User is authenticated
+            document.getElementById('authRequired').style.display = 'none';
+            document.getElementById('staffDashboard').style.display = 'flex';
+
+            currentRole = roleParam || storedRole || 'staff';
+            
+            // Store in localStorage for persistence
+            if (roleParam) {
+                localStorage.setItem('staffRole', roleParam);
+            }
+
+            // Update UI based on role
+            updateUIByRole();
+            populateProducts();
+        });
+
+        function updateUIByRole() {
+            const roleIndicator = document.getElementById('roleIndicator');
+            const managerControls = document.getElementById('managerControls');
+
+            if (currentRole === 'manager') {
+                const badge = document.createElement('div');
+                badge.className = 'role-badge';
+                badge.textContent = 'Manager Mode - Full Edit Access';
+                roleIndicator.appendChild(badge);
+                managerControls.classList.add('active');
+            } else {
+                const badge = document.createElement('div');
+                badge.className = 'role-badge';
+                badge.style.background = '#666';
+                badge.textContent = 'Staff Mode - View Only';
+                roleIndicator.appendChild(badge);
+                managerControls.classList.remove('active');
+            }
+        }
+
+        function populateProducts() {
+            if (typeof mockData === 'undefined') {
+                console.error('Mock data not loaded');
+                return;
+            }
+
+            const productCards = document.getElementById('productCards');
+            productCards.innerHTML = mockData.standardCakes.map(product => `
+                <div class="product-card" id="product-${product.id}">
+                    <div class="product-image" style="background-image: url('${product.image}');"></div>
+                    <div class="product-content">
+                        <h3 class="product-name" data-field="name">${product.name}</h3>
+                        <p class="product-description" data-field="description">${product.description}</p>
+                        <div class="product-price" data-field="price">$${product.price}</div>
+                        
+                        ${currentRole === 'manager' ? `
+                            <div class="product-actions active">
+                                <button class="btn-edit" onclick="startEdit(${product.id})">Edit</button>
+                                <button class="btn-delete" onclick="deleteProduct(${product.id})">Delete</button>
+                            </div>
+                            
+                            <div class="manager-edit-form" id="edit-form-${product.id}">
+                                <div class="form-group">
+                                    <label>Product Name:</label>
+                                    <input type="text" value="${product.name}" data-product-id="${product.id}" data-field="name" class="edit-input">
+                                </div>
+                                <div class="form-group">
+                                    <label>Description:</label>
+                                    <textarea data-product-id="${product.id}" data-field="description" class="edit-input">${product.description}</textarea>
+                                </div>
+                                <div class="form-group">
+                                    <label>Price:</label>
+                                    <input type="number" step="0.01" value="${product.price}" data-product-id="${product.id}" data-field="price" class="edit-input">
+                                </div>
+                                <div class="form-actions">
+                                    <button class="btn-save" onclick="saveEdit(${product.id})">Save Changes</button>
+                                    <button class="btn-cancel" onclick="cancelEdit(${product.id})">Cancel</button>
+                                </div>
+                            </div>
+                        ` : ''}
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function startEdit(productId) {
+            editingProductId = productId;
+            const form = document.getElementById(`edit-form-${productId}`);
+            form.classList.add('active');
+        }
+
+        function cancelEdit(productId) {
+            const form = document.getElementById(`edit-form-${productId}`);
+            form.classList.remove('active');
+            editingProductId = null;
+        }
+
+        function saveEdit(productId) {
+            const form = document.getElementById(`edit-form-${productId}`);
+            const inputs = form.querySelectorAll('.edit-input');
+
+            // Find the product in mockData
+            const product = mockData.standardCakes.find(p => p.id === productId);
+            if (product) {
+                inputs.forEach(input => {
+                    const field = input.dataset.field;
+                    const value = input.value;
+
+                    if (field === 'price') {
+                        product[field] = parseFloat(value);
+                    } else {
+                        product[field] = value;
+                    }
+                });
+
+                // Update the display
+                const card = document.getElementById(`product-${productId}`);
+                card.querySelector('[data-field="name"]').textContent = product.name;
+                card.querySelector('[data-field="description"]').textContent = product.description;
+                card.querySelector('[data-field="price"]').textContent = '$' + product.price;
+
+                form.classList.remove('active');
+                editingProductId = null;
+
+                // Show confirmation
+                alert('Product updated successfully!');
+            }
+        }
+
+        function deleteProduct(productId) {
+            if (confirm('Are you sure you want to delete this product?')) {
+                // Remove from mockData
+                mockData.standardCakes = mockData.standardCakes.filter(p => p.id !== productId);
+
+                // Remove from DOM
+                const card = document.getElementById(`product-${productId}`);
+                card.style.opacity = '0';
+                card.style.transform = 'scale(0.95)';
+                setTimeout(() => {
+                    card.remove();
+                }, 300);
+
+                alert('Product deleted successfully!');
+            }
+        }
+
+        function addNewProduct() {
+            const name = prompt('Enter product name:');
+            if (!name) return;
+
+            const description = prompt('Enter product description:');
+            if (!description) return;
+
+            const priceStr = prompt('Enter product price:');
+            if (!priceStr) return;
+
+            const price = parseFloat(priceStr);
+            if (isNaN(price)) {
+                alert('Invalid price. Please enter a number.');
+                return;
+            }
+
+            // Create new product
+            const newId = Math.max(...mockData.standardCakes.map(p => p.id), 0) + 1;
+            const newProduct = {
+                id: newId,
+                name: name,
+                description: description,
+                price: price,
+                image: 'public/ebc-cake-images/Birthday.png' // Default image
+            };
+
+            mockData.standardCakes.push(newProduct);
+            populateProducts();
+            alert('Product added successfully!');
+        }
+
+        function handleLogout() {
+            localStorage.removeItem('staffUser');
+            localStorage.removeItem('staffRole');
+            window.location.href = 'staff-login.html';
+        }
+    </script>
+</body>
+</html>

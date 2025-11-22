@@ -1089,3 +1089,20 @@ function getTomorrowsOrders() {
         return pickupDate >= tomorrow && pickupDate < dayAfterTomorrow;
     });
 }
+
+// ====================================================================
+// NAVIGATION HELPER
+// ====================================================================
+
+// Navigate to the correct dashboard based on user role
+function goToDashboard() {
+    const role = localStorage.getItem('staffRole') || 'manager';
+    const dashboardMap = {
+        'manager': 'manager-dashboard.html',
+        'sales': 'sales-dashboard.html',
+        'baker': 'baker-dashboard.html',
+        'decorator': 'decorator-dashboard.html',
+        'accountant': 'manager-dashboard.html'
+    };
+    window.location.href = dashboardMap[role] || 'manager-dashboard.html';
+}

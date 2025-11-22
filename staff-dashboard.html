@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Staff Dashboard - Emily Bakes Cakes</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <!-- Chart.js for charts -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+</head>
+<body class="staff-body">
+    <!-- Left Navigation Bar -->
+    <nav class="staff-nav">
+        <div class="nav-logo">
+            <picture>
+                <source srcset="/public/ebc-cake-images/logo.png" type="image/png">
+                <img src="/public/ebc-cake-images/logo.svg" alt="Emily Bakes Cakes logo">
+            </picture>
+            <h2>Emily Bakes Cakes</h2>
+            <p class="nav-subtitle">Staff Portal</p>
+        </div>
+        <ul class="nav-menu">
+            <li><a href="staff-dashboard.html" class="nav-link active">
+                <span class="nav-icon">📊</span>
+                <span>Dashboard</span>
+            </a></li>
+            <li><a href="staff-orders.html" class="nav-link">
+                <span class="nav-icon">📋</span>
+                <span>Orders</span>
+            </a></li>
+            <li><a href="staff-customers.html" class="nav-link">
+                <span class="nav-icon">👥</span>
+                <span>Customers</span>
+            </a></li>
+            <li><a href="staff-reports.html" class="nav-link">
+                <span class="nav-icon">📈</span>
+                <span>Reports</span>
+            </a></li>
+            <li><a href="staff-settings.html" class="nav-link">
+                <span class="nav-icon">⚙️</span>
+                <span>Settings</span>
+            </a></li>
+        </ul>
+    </nav>
+
+    <!-- Main Content Area -->
+    <div class="staff-main">
+        <!-- Header Bar -->
+        <header class="staff-header">
+            <div class="header-left">
+                <h1 class="welcome-text">Welcome, Sarah Johnson</h1>
+                <p class="role-text">Sales Staff</p>
+            </div>
+            <div class="header-right">
+                <span class="pickup-badge">5 Pickups Today</span>
+                <a href="index.html" class="back-link">Back to Site</a>
+                <button class="logout-btn" onclick="logout()">Logout</button>
+            </div>
+        </header>
+
+        <!-- Dashboard Content -->
+        <div class="dashboard-content">
+            <!-- KPI Cards Row -->
+            <div class="kpi-row">
+                <div class="kpi-card kpi-blue">
+                    <h3>Orders Today</h3>
+                    <p class="kpi-number">12</p>
+                </div>
+                <div class="kpi-card kpi-amber">
+                    <h3>Pending Pickup</h3>
+                    <p class="kpi-number">5</p>
+                </div>
+                <div class="kpi-card kpi-green">
+                    <h3>Ready for Pickup</h3>
+                    <p class="kpi-number">3</p>
+                </div>
+                <div class="kpi-card kpi-purple">
+                    <h3>Weekly Revenue</h3>
+                    <p class="kpi-number">$2,450</p>
+                </div>
+            </div>
+
+            <!-- Action Buttons Row -->
+            <div class="action-row">
+                <button class="action-btn primary-btn">Create New Order</button>
+                <button class="action-btn secondary-btn">Add Customer</button>
+            </div>
+
+            <!-- Charts Row -->
+            <div class="charts-row">
+                <div class="chart-card">
+                    <h3>Today's Order Status</h3>
+                    <canvas id="statusChart"></canvas>
+                </div>
+                <div class="chart-card">
+                    <h3>Most Popular Cakes This Week</h3>
+                    <canvas id="popularChart"></canvas>
+                </div>
+            </div>
+
+            <!-- Today's Pickups Table -->
+            <div class="table-section">
+                <div class="table-header">
+                    <h3>Today's Pickups</h3>
+                    <input type="text" id="searchBox" class="search-box" placeholder="Search orders...">
+                </div>
+                <table class="orders-table">
+                    <thead>
+                        <tr>
+                            <th>Order ID</th>
+                            <th>Customer Name</th>
+                            <th>Pickup Time</th>
+                            <th>Status</th>
+                            <th>Total</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="ordersTableBody">
+                        <tr>
+                            <td>#5001</td>
+                            <td>Michael Chen</td>
+                            <td>10:00 AM</td>
+                            <td><span class="status-badge status-ready">Ready</span></td>
+                            <td>$85.00</td>
+                            <td><button class="view-btn">View</button></td>
+                        </tr>
+                        <tr>
+                            <td>#5002</td>
+                            <td>Jessica Williams</td>
+                            <td>11:30 AM</td>
+                            <td><span class="status-badge status-decorating">Decorating</span></td>
+                            <td>$120.00</td>
+                            <td><button class="view-btn">View</button></td>
+                        </tr>
+                        <tr>
+                            <td>#5003</td>
+                            <td>David Martinez</td>
+                            <td>1:00 PM</td>
+                            <td><span class="status-badge status-baking">In Baking</span></td>
+                            <td>$95.00</td>
+                            <td><button class="view-btn">View</button></td>
+                        </tr>
+                        <tr>
+                            <td>#5004</td>
+                            <td>Emily Thompson</td>
+                            <td>2:30 PM</td>
+                            <td><span class="status-badge status-ready">Ready</span></td>
+                            <td>$150.00</td>
+                            <td><button class="view-btn">View</button></td>
+                        </tr>
+                        <tr>
+                            <td>#5005</td>
+                            <td>Robert Brown</td>
+                            <td>4:00 PM</td>
+                            <td><span class="status-badge status-pending">To Be Created</span></td>
+                            <td>$75.00</td>
+                            <td><button class="view-btn">View</button></td>
+                        </tr>
+                        <tr>
+                            <td>#5006</td>
+                            <td>Amanda Garcia</td>
+                            <td>5:00 PM</td>
+                            <td><span class="status-badge status-ready">Ready</span></td>
+                            <td>$110.00</td>
+                            <td><button class="view-btn">View</button></td>
+                        </tr>
+                        <tr>
+                            <td>#5007</td>
+                            <td>Christopher Lee</td>
+                            <td>5:30 PM</td>
+                            <td><span class="status-badge status-decorating">Decorating</span></td>
+                            <td>$135.00</td>
+                            <td><button class="view-btn">View</button></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Tomorrow's Schedule Preview -->
+            <div class="schedule-section">
+                <h3>Tomorrow's Schedule</h3>
+                <div class="schedule-list">
+                    <div class="schedule-item">
+                        <span class="schedule-time">9:00 AM</span>
+                        <span class="schedule-customer">Alice Wong</span>
+                        <span class="schedule-order">Birthday Cake - 3 layer</span>
+                    </div>
+                    <div class="schedule-item">
+                        <span class="schedule-time">11:00 AM</span>
+                        <span class="schedule-customer">Tom Harris</span>
+                        <span class="schedule-order">Wedding Cake - 5 layer</span>
+                    </div>
+                    <div class="schedule-item">
+                        <span class="schedule-time">2:00 PM</span>
+                        <span class="schedule-customer">Nancy Drew</span>
+                        <span class="schedule-order">Cupcakes - 24 count</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/dashboard.js"></script>
+</body>
+</html>

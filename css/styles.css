@@ -1,4 +1,4 @@
-/* ============================================================================
+﻿/* ============================================================================
    EMILY BAKES CAKES - MAIN STYLESHEET
    Pure HTML/CSS Version
    Colors: #F8EBD7 (cream), #C44569 (raspberry pink), #2B2B2B (charcoal)
@@ -154,6 +154,27 @@ body {
     transform: rotate(-45deg) translate(6px, -6px);
 }
 
+/* Logo image sizing (main nav and staff sidebar) */
+.logo img,
+.nav-logo img {
+    width: 64px;
+    height: 64px;
+    object-fit: contain;
+    display: inline-block;
+    vertical-align: middle;
+    margin-right: 12px;
+    transition: width 0.15s ease, height 0.15s ease;
+}
+
+@media (max-width: 768px) {
+    .logo img,
+    .nav-logo img {
+        width: 48px;
+        height: 48px;
+        margin-right: 8px;
+    }
+}
+
 /* ============================================================================
    HERO SECTION (Homepage)
    ============================================================================ */
@@ -175,7 +196,7 @@ body {
     left: 0;
     right: 0;
     bottom: 0;
-    background: url('public/hero-image.jpg') center/cover;
+    background: url('/public/ebc-cake-images/hero-cake.jpg') center/cover;
     opacity: 0.35;
     z-index: 1;
 }
@@ -666,7 +687,7 @@ body {
 }
 
 .decoration-category li:before {
-    content: "✓";
+    content: "Γ£ô";
     position: absolute;
     left: 0;
     color: #C44569;
@@ -714,14 +735,39 @@ body {
 }
 
 .story-content {
-    max-width: 800px;
+    max-width: 1100px;
     margin: 0 auto 60px;
+    display: grid;
+    grid-template-columns: 400px 1fr;
+    gap: 50px;
+    align-items: start;
 }
 
-.story-content p {
+.story-image {
+    width: 100%;
+    border-radius: 12px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+    position: sticky;
+    top: 100px;
+}
+
+.story-text p {
     font-size: 18px;
     line-height: 1.8;
     margin-bottom: 20px;
+}
+
+@media (max-width: 968px) {
+    .story-content {
+        grid-template-columns: 1fr;
+        gap: 30px;
+    }
+    
+    .story-image {
+        position: static;
+        max-width: 500px;
+        margin: 0 auto;
+    }
 }
 
 .timeline {
@@ -931,88 +977,143 @@ body {
 }
 
 .faq-section {
-    padding: 60px 20px;
-    background: white;
+    padding: 80px 20px;
+    background: linear-gradient(to bottom, #F8EBD7 0%, white 100%);
 }
 
 .faq-section h2 {
     font-family: 'Playfair Display', serif;
-    font-size: 36px;
+    font-size: 42px;
     text-align: center;
-    margin-bottom: 40px;
+    margin-bottom: 20px;
+    color: #2B2B2B;
+}
+
+.faq-section > .container > p {
+    text-align: center;
+    font-size: 18px;
+    color: #5A3825;
+    margin-bottom: 60px;
+    max-width: 700px;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .faq-category {
-    max-width: 1000px;
-    margin: 0 auto 50px;
+    max-width: 900px;
+    margin: 0 auto 60px;
 }
 
 .faq-category-title {
     font-family: 'Poppins', sans-serif;
-    font-size: 24px;
-    font-weight: 600;
+    font-size: 28px;
+    font-weight: 700;
     color: #C44569;
-    margin-bottom: 25px;
-    padding-bottom: 10px;
-    border-bottom: 2px solid #F8EBD7;
+    margin-bottom: 30px;
+    text-align: center;
+    position: relative;
+    padding-bottom: 15px;
+}
+
+.faq-category-title::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80px;
+    height: 3px;
+    background: #C44569;
+    border-radius: 2px;
 }
 
 .faq-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 30px;
-    max-width: 1000px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    max-width: 900px;
     margin: 0 auto;
 }
 
 .faq-item {
-    padding: 20px;
-    background: #F8EBD7;
-    border-radius: 8px;
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    transition: all 0.3s ease;
+    border: 2px solid transparent;
+}
+
+.faq-item:hover {
+    box-shadow: 0 6px 20px rgba(196, 69, 105, 0.15);
+    border-color: #F8EBD7;
+    transform: translateY(-2px);
 }
 
 .faq-item h3,
 .faq-item h4 {
     font-family: 'Poppins', sans-serif;
-    font-size: 18px;
+    font-size: 19px;
     font-weight: 600;
-    color: #C44569;
-    margin-bottom: 10px;
+    color: #2B2B2B;
+    margin-bottom: 12px;
+    padding: 20px 24px 0;
+    line-height: 1.4;
 }
 
 .faq-item p {
-    font-size: 15px;
-    line-height: 1.6;
+    font-size: 16px;
+    line-height: 1.7;
+    color: #5A3825;
+    padding: 0 24px 20px;
 }
 
 .faq-item ul {
     margin: 10px 0;
-    padding-left: 20px;
+    padding-left: 44px;
+    padding-right: 24px;
+    padding-bottom: 20px;
 }
 
 .faq-item ul li {
-    font-size: 15px;
-    line-height: 1.6;
-    margin-bottom: 5px;
+    font-size: 16px;
+    line-height: 1.7;
+    margin-bottom: 8px;
+    color: #5A3825;
 }
 
 .faq-cta {
     max-width: 700px;
-    margin: 50px auto 0;
+    margin: 60px auto 0;
     text-align: center;
-    padding: 40px 30px;
-    background: #F8EBD7;
-    border-radius: 12px;
+    padding: 50px 40px;
+    background: linear-gradient(135deg, #C44569 0%, #D45579 100%);
+    border-radius: 16px;
+    box-shadow: 0 8px 24px rgba(196, 69, 105, 0.3);
 }
 
 .faq-cta p {
-    font-size: 16px;
+    font-size: 18px;
     line-height: 1.6;
     margin-bottom: 10px;
+    color: white;
+}
+
+.faq-cta p strong {
+    font-size: 22px;
+    font-weight: 700;
 }
 
 .faq-cta .cta-button {
-    margin-top: 20px;
+    margin-top: 25px;
+    background: white;
+    color: #C44569;
+    border-color: white;
+}
+
+.faq-cta .cta-button:hover {
+    background: #F8EBD7;
+    transform: translateY(-4px);
 }
 
 /* ============================================================================
@@ -1208,13 +1309,19 @@ body {
     line-height: 1.5;
 }
 
-.nav-menu {
+.staff-nav .nav-menu {
     list-style: none;
     padding: 20px 10px;
+<<<<<<< HEAD
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+=======
     margin: 0;
     display: flex;
     flex-direction: column;
     gap: 4px;
+>>>>>>> fc5c35c8a03463124447aa2f9274f2b4a2d05c24
 }
 
 .nav-menu li {

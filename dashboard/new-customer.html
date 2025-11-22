@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Add New Customer - Emily Bakes Cakes</title>
     <link rel="stylesheet" href="css/dashboard-redesigned.css">
+    <script src="js/ux-enhancements.js"></script>
     <style>
         .form-container {
             max-width: 1200px;
@@ -211,12 +212,10 @@
     <header class="header">
         <div class="header-left">
             <div class="header-logo">
-                <span class="logo-icon">🍰</span>
-                <div>
-                    <div class="logo-text">Emily Bakes</div>
-                    <div class="logo-subtext">CAKES</div>
-                </div>
+                <div class="logo-text">Emily Bakes Cakes</div>
             </div>
+        </div>
+        <div class="header-center">
             <div class="header-user">
                 <div class="role-badge" id="staff-role">Staff</div>
                 <div class="manager-name" id="staff-name">Loading...</div>
@@ -228,16 +227,14 @@
         </div>
     </header>
 
-    <!-- SIDEBAR NAVIGATION -->
+    <!-- LEFT NAVIGATION -->
     <nav class="nav-sidebar">
         <ul>
-            <li><a href="index.html" class="nav-link">📊 Dashboard</a></li>
-            <li><a href="all-orders.html" class="nav-link">📋 All Orders</a></li>
-            <li><a href="all-customers.html" class="nav-link">👥 All Customers</a></li>
-            <li><a href="new-customer.html" class="nav-link active">➕ New Customer</a></li>
-            <li><a href="../order-form.html" class="nav-link">🎂 Order Form</a></li>
-            <li><a href="reports.html" class="nav-link">📈 Reports</a></li>
-            <li><a href="settings.html" class="nav-link">⚙️ Settings</a></li>
+            <li><a href="#" onclick="goToDashboard(); return false;" class="nav-link">Dashboard</a></li>
+            <li><a href="all-orders.html" class="nav-link">View Orders</a></li>
+            <li><a href="all-customers.html" class="nav-link">View Customers</a></li>
+            <li><a href="view-products.html" class="nav-link">View Products</a></li>
+            <li><a href="reports.html" class="nav-link">Reports</a></li>
         </ul>
     </nav>
 
@@ -246,7 +243,7 @@
         <div class="content">
             <!-- PAGE HEADER -->
             <div class="page-header">
-                <h1 class="page-title">➕ Add New Customer</h1>
+                <h1 class="page-title">Add New Customer</h1>
                 <p class="page-subtitle">Create a new customer profile in the system</p>
             </div>
 
@@ -406,7 +403,7 @@
                     </div>
 
                     <!-- ACTION BUTTONS -->
-                    <div class="form-actions">
+                    <div class="form-actions form-actions-sticky">
                         <button type="submit" class="btn-submit">✅ Create Customer</button>
                         <button type="reset" class="btn-reset">🔄 Clear Form</button>
                         <button type="button" class="btn-cancel" onclick="goToCustomers()">✕ Cancel</button>
@@ -433,6 +430,17 @@
 
         function handleSubmit(event) {
             event.preventDefault();
+
+            // Validate form first
+            if (!validateForm('newCustomerForm')) {
+                return;
+            }
+
+            // Show loading state
+            const submitBtn = event.target.querySelector('.btn-submit');
+            const originalText = submitBtn.textContent;
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Creating...';
 
             // Get form data
             const formData = {
@@ -491,11 +499,15 @@
             customers.push(formData);
             localStorage.setItem('customers', JSON.stringify(customers));
 
-            // Show success message
-            showSuccess(`Customer ${formData.firstName} ${formData.lastName} created successfully!`);
+            // Show success toast
+            showToast(`Customer ${formData.firstName} ${formData.lastName} created successfully!`, 'success');
 
             // Reset form
             document.getElementById('newCustomerForm').reset();
+
+            // Restore button state
+            submitBtn.disabled = false;
+            submitBtn.textContent = originalText;
 
             // Redirect to customers page after 2 seconds
             setTimeout(() => {
@@ -533,5 +545,6 @@
             window.location.href = '../staff-login.html';
         }
     </script>
+    <script src="js/main.js"></script>
 </body>
 </html>
