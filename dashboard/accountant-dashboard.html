@@ -3,17 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
     <title>Accountant Dashboard - Emily Bakes Cakes</title>
     <link rel="stylesheet" href="css/dashboard-redesigned.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
     <style>
-        /* Ultra-Compact Dashboard Layout */
+        /* EXACT SAME LAYOUT AS SALES/MANAGER DASHBOARD */
 
         /* KPI Cards Row */
         .kpi-row {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
-            gap: 10px;
+            gap: 12px;
             margin-bottom: 10px;
         }
 
@@ -25,6 +28,7 @@
             box-shadow: 0 2px 6px rgba(196, 69, 105, 0.2);
             transition: all 0.2s;
             cursor: pointer;
+            text-align: center;
         }
 
         .kpi-card:hover {
@@ -41,12 +45,6 @@
         .kpi-card.blue { background: linear-gradient(135deg, #3B82F6, #2563EB); box-shadow: 0 2px 6px rgba(59, 130, 246, 0.2); }
         .kpi-card.blue:hover { box-shadow: 0 4px 10px rgba(59, 130, 246, 0.3); }
 
-        .kpi-icon {
-            font-size: 22px;
-            margin-bottom: 6px;
-            opacity: 0.9;
-        }
-
         .kpi-value {
             font-size: 26px;
             font-weight: 700;
@@ -57,10 +55,18 @@
         .kpi-label {
             font-size: 11px;
             opacity: 0.95;
-            font-weight: 500;
+            font-weight: 700;
         }
 
-        /* Quick Action Buttons Bar - Compact & Offset */
+        .kpi-subtitle {
+            display: block;
+            font-size: 10px;
+            color: rgba(255, 255, 255, 0.9);
+            margin-top: 4px;
+            font-weight: 400;
+        }
+
+        /* Quick Action Buttons Bar */
         .quick-actions-bar {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
@@ -105,23 +111,19 @@
             box-shadow: 0 3px 10px rgba(196, 69, 105, 0.4);
         }
 
-        .action-icon {
-            font-size: 14px;
-        }
-
-        /* Charts Section - Smaller */
+        /* Charts Section */
         .charts-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 10px;
-            margin-bottom: 10px;
+            gap: 12px;
+            margin-bottom: 16px;
         }
 
         .chart-card {
             background: white;
             border-radius: 8px;
-            padding: 12px;
-            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
+            padding: 14px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
         }
 
         .chart-title {
@@ -129,9 +131,16 @@
             font-weight: 700;
             color: #1F2937;
             margin-bottom: 8px;
-            display: flex;
-            align-items: center;
-            gap: 6px;
+            text-align: center;
+        }
+
+        .chart-subtitle {
+            display: block;
+            font-size: 11px;
+            color: #C44569;
+            margin-bottom: 8px;
+            font-weight: 600;
+            text-align: center;
         }
 
         .chart-container {
@@ -139,29 +148,27 @@
             position: relative;
         }
 
-        /* Tables Section - Smaller */
+        /* Tables Section */
         .tables-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 10px;
-            margin-bottom: 10px;
+            gap: 12px;
+            margin-bottom: 16px;
         }
 
         .table-card {
             background: white;
             border-radius: 8px;
-            padding: 12px;
-            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
+            padding: 14px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
         }
 
         .table-title {
-            font-size: 13px;
+            font-size: 14px;
             font-weight: 700;
             color: #1F2937;
-            margin-bottom: 8px;
-            display: flex;
-            align-items: center;
-            gap: 6px;
+            margin-bottom: 10px;
+            text-align: center;
         }
 
         .compact-table {
@@ -174,10 +181,10 @@
         }
 
         .compact-table th {
-            padding: 6px 8px;
-            text-align: left;
-            font-size: 10px;
-            font-weight: 600;
+            padding: 8px 10px;
+            text-align: center;
+            font-size: 11px;
+            font-weight: 700;
             color: #6B7280;
             text-transform: uppercase;
             letter-spacing: 0.3px;
@@ -185,93 +192,79 @@
         }
 
         .compact-table td {
-            padding: 6px 8px;
-            font-size: 11px;
+            padding: 8px 10px;
+            font-size: 12px;
             color: #374151;
             border-bottom: 1px solid #F3F4F6;
+            text-align: center;
         }
 
         .compact-table tbody tr:hover {
             background: #F9FAFB;
         }
 
-        .status-badge {
+        .payment-badge {
             display: inline-block;
-            padding: 2px 6px;
+            padding: 3px 8px;
             border-radius: 8px;
             font-size: 10px;
-            font-weight: 600;
-            text-transform: capitalize;
+            font-weight: 700;
         }
 
-        .status-badge.status-baking {
-            background: #FEF3C7;
-            color: #92400E;
+        .payment-badge.card {
+            background: #DBEAFE;
+            color: #1E40AF;
         }
 
-        .status-badge.status-decorating {
-            background: #EDE9FE;
-            color: #6B21A8;
-        }
-
-        .status-badge.status-ready {
+        .payment-badge.cash {
             background: #D1FAE5;
             color: #065F46;
         }
 
-        .status-badge.status-paid {
-            background: #D1FAE5;
-            color: #065F46;
-        }
-
-        .status-badge.status-pending {
-            background: #FEF3C7;
-            color: #92400E;
-        }
-
-        .status-badge.status-overdue {
-            background: #FEE2E2;
-            color: #991B1B;
-        }
-
-        /* Schedule Section - Smaller */
-        .schedule-card {
+        /* Financial Summary Section */
+        .financial-summary-card {
             background: white;
             border-radius: 8px;
-            padding: 12px;
-            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
+            padding: 14px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+            margin-top: 16px;
         }
 
-        .schedule-grid {
+        .summary-title {
+            font-size: 14px;
+            font-weight: 700;
+            color: #1F2937;
+            margin-bottom: 12px;
+            text-align: center;
+        }
+
+        .summary-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-            gap: 8px;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 12px;
         }
 
-        .schedule-item {
-            padding: 10px;
+        .summary-item {
+            padding: 12px;
             background: #F9FAFB;
-            border-radius: 6px;
-            border-left: 3px solid #C44569;
+            border-radius: 8px;
+            border-left: 4px solid #C44569;
+            text-align: center;
         }
 
-        .schedule-time {
+        .summary-value {
+            font-size: 20px;
             font-weight: 700;
             color: #C44569;
-            font-size: 11px;
             margin-bottom: 4px;
         }
 
-        .schedule-customer {
-            font-weight: 600;
-            color: #1F2937;
+        .summary-label {
             font-size: 11px;
-            margin-bottom: 2px;
-        }
-
-        .schedule-cake {
-            font-size: 10px;
+            font-weight: 600;
             color: #6B7280;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
         @media (max-width: 1200px) {
@@ -285,6 +278,9 @@
             .quick-actions-bar,
             .charts-grid,
             .tables-grid {
+                grid-template-columns: 1fr;
+            }
+            .summary-grid {
                 grid-template-columns: 1fr;
             }
         }
@@ -310,7 +306,6 @@
             <li><a href="accountant-dashboard.html" class="nav-link active">Dashboard</a></li>
             <li><a href="all-orders.html" class="nav-link">View Orders</a></li>
             <li><a href="all-customers.html" class="nav-link">View Customers</a></li>
-            <li><a href="view-products.html" class="nav-link">View Products</a></li>
             <li><a href="reports.html" class="nav-link">Reports</a></li>
         </ul>
     </nav>
@@ -318,265 +313,378 @@
     <!-- MAIN CONTENT -->
     <main class="main-content">
         <div class="content">
-            <!-- KPI CARDS -->
+            <!-- KPI CARDS - ACCOUNTANT SPECIFIC -->
             <div class="kpi-row">
-                <div class="kpi-card" onclick="location.href='#recent-transactions'">
-                    <div class="kpi-icon">💰</div>
-                    <div class="kpi-value" id="weekly-revenue">$0</div>
-                    <div class="kpi-label">Weekly Revenue</div>
+                <div class="kpi-card" onclick="location.href='reports.html'">
+                    <div class="kpi-value" id="todays-revenue">$0</div>
+                    <div class="kpi-label">Today's Revenue</div>
+                    <small class="kpi-subtitle" id="avg-order-value">Avg order: $0</small>
                 </div>
-                <div class="kpi-card orange" onclick="location.href='#recent-transactions'">
-                    <div class="kpi-icon">💸</div>
-                    <div class="kpi-value" id="deposits-collected">$0</div>
-                    <div class="kpi-label">Deposits Collected</div>
+                <div class="kpi-card green" onclick="location.href='reports.html'">
+                    <div class="kpi-value" id="deposit-revenue">$0</div>
+                    <div class="kpi-label">Deposit Revenue</div>
+                    <small class="kpi-subtitle">Required: 50% per order</small>
                 </div>
-                <div class="kpi-card green" onclick="location.href='#outstanding-invoices'">
-                    <div class="kpi-icon">🔔</div>
-                    <div class="kpi-value" id="outstanding-balance">$0</div>
-                    <div class="kpi-label">Outstanding Balances</div>
-                </div>
-                <div class="kpi-card blue" onclick="location.href='reports.html'">
-                    <div class="kpi-icon">✅</div>
-                    <div class="kpi-value" id="completed-orders-week">0</div>
+                <div class="kpi-card blue" onclick="location.href='all-orders.html'">
+                    <div class="kpi-value" id="completed-orders">0</div>
                     <div class="kpi-label">Completed Orders</div>
+                    <small class="kpi-subtitle" id="completed-revenue">Posted: $0</small>
+                </div>
+                <div class="kpi-card orange" onclick="location.href='reports.html'">
+                    <div class="kpi-value" id="refunds-week">0</div>
+                    <div class="kpi-label">Refunds This Week</div>
+                    <small class="kpi-subtitle">Refunded: $0.00</small>
                 </div>
             </div>
 
-            <!-- QUICK ACTIONS BAR -->
+            <!-- QUICK ACTIONS BAR - ACCOUNTANT SPECIFIC -->
             <div class="quick-actions-bar">
-                <a href="all-orders.html" class="action-btn primary">
-                    <span class="action-icon">📝</span>
-                    <span>View Transactions</span>
-                </a>
-                <a href="#" class="action-btn" onclick="alert('Add Expense Entry feature coming soon!'); return false;">
-                    <span class="action-icon">➕</span>
-                    <span>Add Expense Entry</span>
-                </a>
-                <a href="#" class="action-btn" onclick="alert('View Invoices feature coming soon!'); return false;">
-                    <span class="action-icon">📄</span>
-                    <span>View Invoices</span>
+                <a href="../order-form.html" class="action-btn primary">
+                    <span>Create New Order</span>
                 </a>
                 <a href="reports.html" class="action-btn">
-                    <span class="action-icon">📊</span>
                     <span>View Reports</span>
+                </a>
+                <a href="#recent-transactions" class="action-btn">
+                    <span>Transactions</span>
+                </a>
+                <a href="#outstanding-balances" class="action-btn">
+                    <span>Outstanding Balances</span>
                 </a>
             </div>
 
-            <!-- CHARTS -->
+            <!-- CHARTS - FINANCIAL SPECIFIC -->
             <div class="charts-grid">
                 <div class="chart-card">
-                    <h3 class="chart-title"><span>📈</span> Weekly Revenue Trend</h3>
+                    <h3 class="chart-title">Payment Status Breakdown</h3>
+                    <small class="chart-subtitle">Deposits vs Balance Due</small>
                     <div class="chart-container">
                         <canvas id="revenueChart"></canvas>
                     </div>
                 </div>
                 <div class="chart-card">
-                    <h3 class="chart-title"><span>💳</span> Payment Methods</h3>
+                    <h3 class="chart-title">Daily Cash Flow (7 Days)</h3>
+                    <small class="chart-subtitle">Cash In vs Out</small>
                     <div class="chart-container">
-                        <canvas id="paymentChart"></canvas>
+                        <canvas id="statusChart"></canvas>
                     </div>
                 </div>
                 <div class="chart-card">
-                    <h3 class="chart-title"><span>📊</span> Financial Overview</h3>
+                    <h3 class="chart-title">Revenue by Customer Type</h3>
+                    <small class="chart-subtitle" id="customer-split">Retail: 65% | Corporate: 35%</small>
                     <div class="chart-container">
-                        <canvas id="balanceChart"></canvas>
+                        <canvas id="productsChart"></canvas>
                     </div>
                 </div>
             </div>
 
-            <!-- TABLES -->
+            <!-- TABLES - ACCOUNTANT SPECIFIC -->
             <div class="tables-grid">
                 <!-- RECENT TRANSACTIONS -->
                 <div class="table-card" id="recent-transactions">
-                    <h3 class="table-title"><span>💳</span> Recent Transactions</h3>
+                    <h3 class="table-title">Recent Transactions</h3>
                     <table class="compact-table">
                         <thead>
                             <tr>
-                                <th>Date</th>
-                                <th>Description</th>
+                                <th>Order ID</th>
+                                <th>Customer</th>
                                 <th>Amount</th>
-                                <th>Status</th>
+                                <th>Type</th>
+                                <th>Date</th>
                             </tr>
                         </thead>
                         <tbody id="transactions-tbody">
-                            <tr><td colspan="4" style="text-align: center; padding: 20px;">Loading...</td></tr>
+                            <tr><td colspan="5" style="text-align: center; padding: 20px;">Loading...</td></tr>
                         </tbody>
                     </table>
                 </div>
 
-                <!-- OUTSTANDING INVOICES -->
-                <div class="table-card">
-                    <h3 class="table-title"><span>📄</span> Outstanding Invoices</h3>
+                <!-- OUTSTANDING BALANCES -->
+                <div class="table-card" id="outstanding-balances">
+                    <h3 class="table-title">Outstanding Balances</h3>
                     <table class="compact-table">
                         <thead>
                             <tr>
-                                <th>Invoice #</th>
+                                <th>Order ID</th>
                                 <th>Customer</th>
-                                <th>Amount</th>
-                                <th>Status</th>
+                                <th>Amount Due</th>
+                                <th>Due Date</th>
                             </tr>
                         </thead>
-                        <tbody id="invoices-tbody">
+                        <tbody id="balances-tbody">
                             <tr><td colspan="4" style="text-align: center; padding: 20px;">Loading...</td></tr>
                         </tbody>
                     </table>
                 </div>
             </div>
 
-            <!-- TOMORROW'S SCHEDULE -->
-            <div class="schedule-card">
-                <h3 class="table-title"><span>📅</span> Tomorrow's Schedule</h3>
-                <div class="schedule-grid" id="tomorrows-schedule">
-                    <div class="schedule-item">
-                        <div class="schedule-time">9:00 AM</div>
-                        <div class="schedule-customer">Sarah Johnson</div>
-                        <div class="schedule-cake">Chocolate Velvet</div>
+            <!-- FINANCIAL SUMMARY (7-DAY OVERVIEW) -->
+            <div class="financial-summary-card">
+                <h3 class="summary-title">Financial Summary (Last 7 Days)</h3>
+                <div class="summary-grid">
+                    <div class="summary-item">
+                        <div class="summary-value" id="summary-total-revenue">$0</div>
+                        <div class="summary-label">Total Revenue</div>
                     </div>
-                    <div class="schedule-item">
-                        <div class="schedule-time">11:30 AM</div>
-                        <div class="schedule-customer">John Smith</div>
-                        <div class="schedule-cake">Strawberry Bliss</div>
+                    <div class="summary-item">
+                        <div class="summary-value" id="summary-deposits">$0</div>
+                        <div class="summary-label">Deposit Revenue</div>
                     </div>
-                    <div class="schedule-item">
-                        <div class="schedule-time">2:00 PM</div>
-                        <div class="schedule-customer">Mike Brown</div>
-                        <div class="schedule-cake">Vanilla Dream</div>
+                    <div class="summary-item">
+                        <div class="summary-value" id="summary-balance-payments">$0</div>
+                        <div class="summary-label">Balance Payments</div>
                     </div>
-                    <div class="schedule-item">
-                        <div class="schedule-time">3:00 PM</div>
-                        <div class="schedule-customer">Lisa Wilson</div>
-                        <div class="schedule-cake">Lemon Zest</div>
+                    <div class="summary-item">
+                        <div class="summary-value" id="summary-avg-order">$0</div>
+                        <div class="summary-label">Avg Order Value</div>
                     </div>
-                    <div class="schedule-item">
-                        <div class="schedule-time">4:30 PM</div>
-                        <div class="schedule-customer">Emily Davis</div>
-                        <div class="schedule-cake">Red Velvet</div>
+                    <div class="summary-item">
+                        <div class="summary-value" id="summary-new-customers">0</div>
+                        <div class="summary-label">New Customers</div>
                     </div>
                 </div>
             </div>
         </div>
     </main>
 
+    <script src="./js/unified-mock-data.js"></script>
     <script src="js/main.js"></script>
     <script>
-        // Mock dashboard data for accountant
-        const dashboardData = {
-            transactions: [
-                { date: 'Jan 15', description: 'Custom Wedding Cake', amount: 450, status: 'paid' },
-                { date: 'Jan 15', description: 'Birthday Cake Order', amount: 120, status: 'paid' },
-                { date: 'Jan 14', description: 'Walk-in Sale', amount: 85, status: 'paid' },
-                { date: 'Jan 13', description: 'Special Event Order', amount: 275, status: 'pending' },
-                { date: 'Jan 12', description: 'Corporate Catering', amount: 680, status: 'paid' }
-            ],
-            invoices: [
-                { invoice: 'INV-1023', customer: 'ABC Corp', amount: 450, status: 'pending' },
-                { invoice: 'INV-1019', customer: 'John Smith', amount: 180, status: 'overdue' },
-                { invoice: 'INV-1015', customer: 'Sarah Johnson', amount: 220, status: 'pending' }
-            ],
-            expenses: {
-                ingredients: 3200,
-                utilities: 850,
-                rent: 2500,
-                supplies: 450,
-                marketing: 600,
-                other: 600
-            }
-        };
-
         document.addEventListener('DOMContentLoaded', () => {
+            console.log('💰 Accountant Dashboard loaded:', new Date().toISOString());
+            console.log('💡 If you see old content, press Ctrl+Shift+R (Windows) or Cmd+Shift+R (Mac) to hard refresh');
+            
             if (!checkAuthentication()) return;
             updateHeaderWithUserInfo();
             initializeNav();
-            initializeACCOUNTANTDashboard();
+            initializeAccountantDashboard();
         });
 
-        function initializeACCOUNTANTDashboard() {
-            // KPI values are already set in HTML with static values
-            // In a real application, these would be calculated from actual data
-
+        function initializeAccountantDashboard() {
+            console.log('Initializing Accountant Dashboard...');
+            localStorage.setItem('staffRole', 'accountant');
+            
+            const today = "2025-11-25";
+            
+            // Calculate financial KPIs
+            const todaysOrders = unifiedMockData.orders.filter(o => o.orderDate === today);
+            const todaysRevenue = todaysOrders.reduce((sum, o) => sum + o.totalPrice, 0);
+            const depositRevenue = todaysOrders.reduce((sum, o) => sum + o.depositAmount, 0);
+            const avgOrderValue = todaysOrders.length > 0 ? todaysRevenue / todaysOrders.length : 0;
+            
+            // Use realistic mock numbers for completed orders
+            const completedOrders = 3; // Mock: 3 orders completed today
+            const completedRevenue = 367.50; // Mock: $367.50 posted
+            
+            const refundsWeek = 2; // Mock: 2 refunds this week
+            const refundedAmount = 195.00; // Mock: $195.00 refunded
+            
+            // Update KPIs
+            document.getElementById('todays-revenue').textContent = `$${todaysRevenue.toFixed(2)}`;
+            document.getElementById('avg-order-value').textContent = `Avg order: $${avgOrderValue.toFixed(2)}`;
+            
+            document.getElementById('deposit-revenue').textContent = `$${depositRevenue.toFixed(2)}`;
+            
+            document.getElementById('completed-orders').textContent = completedOrders;
+            document.getElementById('completed-revenue').textContent = `Posted: $${completedRevenue.toFixed(2)}`;
+            
+            document.getElementById('refunds-week').textContent = refundsWeek;
+            
+            // Update refund subtitle
+            const refundSubtitle = document.querySelector('#refunds-week').parentElement.querySelector('.kpi-subtitle');
+            if (refundSubtitle) {
+                refundSubtitle.textContent = refundsWeek === 0 ? 'Refunded: $0.00' : `Refunded: $${refundedAmount.toFixed(2)}`;
+            }
+            
+            // Calculate 7-day financial summary
+            const weeklyRevenue = unifiedMockData.orders.reduce((sum, o) => sum + o.totalPrice, 0);
+            const weeklyDeposits = unifiedMockData.orders.reduce((sum, o) => sum + o.depositAmount, 0);
+            const weeklyBalancePayments = weeklyRevenue - weeklyDeposits;
+            const weeklyAvgOrder = unifiedMockData.orders.length > 0 ? weeklyRevenue / unifiedMockData.orders.length : 0;
+            const newCustomers = 8; // Mock
+            
+            document.getElementById('summary-total-revenue').textContent = `$${weeklyRevenue.toFixed(2)}`;
+            document.getElementById('summary-deposits').textContent = `$${weeklyDeposits.toFixed(2)}`;
+            document.getElementById('summary-balance-payments').textContent = `$${weeklyBalancePayments.toFixed(2)}`;
+            document.getElementById('summary-avg-order').textContent = `$${weeklyAvgOrder.toFixed(2)}`;
+            document.getElementById('summary-new-customers').textContent = newCustomers;
+            
             // Populate tables
             populateTransactions();
-            populateInvoices();
-
+            populateOutstandingBalances();
+            
             // Initialize charts
             setTimeout(() => {
                 if (typeof Chart !== 'undefined') {
-                    console.log('Chart.js loaded, initializing charts...');
                     initializeCharts();
-                } else {
-                    console.error('Chart.js not loaded!');
+                    console.log('Financial charts initialized');
                 }
-            }, 200);
+            }, 100);
         }
 
         function populateTransactions() {
             const tbody = document.getElementById('transactions-tbody');
-
-            if (dashboardData.transactions.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="4" style="text-align: center; padding: 20px; color: #9CA3AF;">No transactions today</td></tr>';
-                return;
-            }
-
-            tbody.innerHTML = dashboardData.transactions.map(transaction => `
+            if (!tbody) return;
+            
+            const transactions = unifiedMockData.orders
+                .sort((a, b) => new Date(b.orderDate) - new Date(a.orderDate))
+                .slice(0, 10)
+                .map(order => ({
+                    id: order.id,
+                    customer: unifiedMockData.getCustomerName(order.customerId),
+                    amount: order.depositAmount,
+                    paymentType: Math.random() > 0.5 ? "Card" : "Cash",
+                    date: order.orderDate
+                }));
+            
+            tbody.innerHTML = transactions.map(txn => `
                 <tr>
-                    <td><strong>${transaction.date}</strong></td>
-                    <td>${transaction.description}</td>
-                    <td><strong>$${transaction.amount}</strong></td>
-                    <td><span class="status-badge status-${transaction.status}">${transaction.status}</span></td>
+                    <td><strong>#${txn.id}</strong></td>
+                    <td>${txn.customer}</td>
+                    <td><strong>$${txn.amount.toFixed(2)}</strong></td>
+                    <td><span class="payment-badge ${txn.paymentType.toLowerCase()}">${txn.paymentType}</span></td>
+                    <td>${txn.date}</td>
                 </tr>
             `).join('');
         }
 
-        function populateInvoices() {
-            const tbody = document.getElementById('invoices-tbody');
-
-            if (dashboardData.invoices.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="4" style="text-align: center; padding: 20px; color: #9CA3AF;">No outstanding invoices</td></tr>';
+        function populateOutstandingBalances() {
+            const tbody = document.getElementById('balances-tbody');
+            if (!tbody) return;
+            
+            const balances = unifiedMockData.orders
+                .filter(o => o.statusId !== 5) // Not picked up
+                .map(order => ({
+                    id: order.id,
+                    customer: unifiedMockData.getCustomerName(order.customerId),
+                    amountDue: order.totalPrice - order.depositAmount,
+                    dueDate: order.pickupDate
+                }))
+                .filter(b => b.amountDue > 0)
+                .sort((a, b) => new Date(a.dueDate) - new Date(b.dueDate))
+                .slice(0, 10);
+            
+            if (balances.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="4" style="text-align: center; padding: 20px;">No outstanding balances</td></tr>';
                 return;
             }
-
-            tbody.innerHTML = dashboardData.invoices.map(invoice => `
+            
+            tbody.innerHTML = balances.map(bal => `
                 <tr>
-                    <td><strong>${invoice.invoice}</strong></td>
-                    <td>${invoice.customer}</td>
-                    <td><strong>$${invoice.amount}</strong></td>
-                    <td><span class="status-badge status-${invoice.status}">${invoice.status}</span></td>
+                    <td><strong>#${bal.id}</strong></td>
+                    <td>${bal.customer}</td>
+                    <td><strong>$${bal.amountDue.toFixed(2)}</strong></td>
+                    <td>${bal.dueDate}</td>
                 </tr>
             `).join('');
         }
 
         function initializeCharts() {
-            // Revenue Trend Chart (30 Days)
+            // Chart 1: Payment Status Breakdown (Horizontal Stacked Bar)
             const revenueCtx = document.getElementById('revenueChart');
             if (revenueCtx) {
                 new Chart(revenueCtx, {
+                    type: 'bar',
+                    data: {
+                        labels: ['Payment Status'],
+                        datasets: [
+                            {
+                                label: 'Deposit Paid (50%)',
+                                data: [6725],
+                                backgroundColor: '#3B82F6',
+                                borderRadius: 4
+                            },
+                            {
+                                label: 'Balance Due (50%)',
+                                data: [6725],
+                                backgroundColor: '#F59E0B',
+                                borderRadius: 4
+                            },
+                            {
+                                label: 'Fully Paid',
+                                data: [2450],
+                                backgroundColor: '#10B981',
+                                borderRadius: 4
+                            }
+                        ]
+                    },
+                    options: {
+                        indexAxis: 'y',
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                position: 'bottom',
+                                labels: { font: { size: 10 }, usePointStyle: true, padding: 8 }
+                            }
+                        },
+                        scales: {
+                            x: {
+                                stacked: true,
+                                beginAtZero: true,
+                                ticks: { 
+                                    callback: v => '$' + v,
+                                    font: { size: 11 }
+                                },
+                                grid: { color: '#F3F4F6' }
+                            },
+                            y: {
+                                stacked: true,
+                                display: false
+                            }
+                        }
+                    }
+                });
+            }
+
+            // Chart 2: Daily Cash Flow (Line Chart with Two Lines)
+            const statusCtx = document.getElementById('statusChart');
+            if (statusCtx) {
+                new Chart(statusCtx, {
                     type: 'line',
                     data: {
-                        labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4'],
-                        datasets: [{
-                            label: 'Revenue',
-                            data: [3200, 4100, 3800, 4600],
-                            borderColor: '#10B981',
-                            backgroundColor: 'rgba(16, 185, 129, 0.1)',
-                            fill: true,
-                            tension: 0.4,
-                            pointRadius: 4,
-                            pointHoverRadius: 6,
-                            pointBackgroundColor: '#10B981',
-                            pointBorderColor: '#fff',
-                            pointBorderWidth: 2
-                        }]
+                        labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+                        datasets: [
+                            {
+                                label: 'Cash In',
+                                data: [1850, 2100, 1950, 2450, 2200, 1900, 1050],
+                                borderColor: '#10B981',
+                                backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                                fill: true,
+                                tension: 0.4,
+                                pointRadius: 4,
+                                pointBackgroundColor: '#10B981',
+                                pointBorderColor: '#fff',
+                                pointBorderWidth: 2
+                            },
+                            {
+                                label: 'Cash Out (Refunds)',
+                                data: [0, 0, 50, 0, 100, 0, 0],
+                                borderColor: '#EF4444',
+                                backgroundColor: 'rgba(239, 68, 68, 0.1)',
+                                fill: true,
+                                tension: 0.4,
+                                pointRadius: 4,
+                                pointBackgroundColor: '#EF4444',
+                                pointBorderColor: '#fff',
+                                pointBorderWidth: 2,
+                                borderDash: [5, 5]
+                            }
+                        ]
                     },
                     options: {
                         responsive: true,
                         maintainAspectRatio: false,
                         plugins: {
-                            legend: { display: false }
+                            legend: {
+                                position: 'bottom',
+                                labels: { font: { size: 10 }, usePointStyle: true, padding: 8 }
+                            }
                         },
                         scales: {
                             y: {
                                 beginAtZero: true,
-                                ticks: {
+                                ticks: { 
                                     callback: v => '$' + v,
                                     font: { size: 11 }
                                 },
@@ -591,20 +699,16 @@
                 });
             }
 
-            // Payment Methods Chart
-            const paymentCtx = document.getElementById('paymentChart');
-            if (paymentCtx) {
-                new Chart(paymentCtx, {
-                    type: 'pie',
+            // Chart 3: Revenue by Customer Type (Doughnut)
+            const productsCtx = document.getElementById('productsChart');
+            if (productsCtx) {
+                new Chart(productsCtx, {
+                    type: 'doughnut',
                     data: {
-                        labels: ['Cash', 'Debit', 'Credit Card'],
+                        labels: ['Retail (Individual)', 'Corporate (Business)'],
                         datasets: [{
-                            data: [25, 40, 35],
-                            backgroundColor: [
-                                '#10B981',
-                                '#3B82F6',
-                                '#F59E0B'
-                            ],
+                            data: [8737.50, 4712.50],
+                            backgroundColor: ['#C44569', '#3B82F6'],
                             borderColor: '#fff',
                             borderWidth: 2
                         }]
@@ -615,61 +719,40 @@
                         plugins: {
                             legend: {
                                 position: 'bottom',
-                                labels: {
+                                labels: { 
                                     font: { size: 10 },
                                     usePointStyle: true,
-                                    padding: 8
+                                    padding: 10,
+                                    generateLabels: function(chart) {
+                                        const data = chart.data;
+                                        return data.labels.map((label, i) => {
+                                            const value = data.datasets[0].data[i];
+                                            const total = data.datasets[0].data.reduce((a, b) => a + b, 0);
+                                            const percentage = Math.round((value / total) * 100);
+                                            return {
+                                                text: `${label}: ${percentage}%`,
+                                                fillStyle: data.datasets[0].backgroundColor[i],
+                                                hidden: false,
+                                                index: i
+                                            };
+                                        });
+                                    }
+                                }
+                            },
+                            tooltip: {
+                                callbacks: {
+                                    label: function(context) {
+                                        const label = context.label || '';
+                                        const value = context.parsed;
+                                        return `${label}: $${value.toFixed(2)}`;
+                                    }
                                 }
                             }
                         }
                     }
                 });
             }
-
-            // Collected vs Outstanding Chart
-            const balanceCtx = document.getElementById('balanceChart');
-            if (balanceCtx) {
-                new Chart(balanceCtx, {
-                    type: 'bar',
-                    data: {
-                        labels: ['Collected', 'Outstanding'],
-                        datasets: [{
-                            label: 'Amount',
-                            data: [5400, 2100],
-                            backgroundColor: '#10B981',
-                            borderRadius: 6,
-                            borderSkipped: false
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        plugins: {
-                            legend: { display: false }
-                        },
-                        scales: {
-                            y: {
-                                beginAtZero: true,
-                                ticks: {
-                                    callback: v => '$' + v,
-                                    font: { size: 11 }
-                                },
-                                grid: { color: '#F3F4F6' }
-                            },
-                            x: {
-                                ticks: { font: { size: 11 } },
-                                grid: { display: false }
-                            }
-                        }
-                    }
-                });
-            }
         }
-
-        // Set accountant role on page load
-        document.addEventListener('DOMContentLoaded', function() {
-            localStorage.setItem('staffRole', 'accountant');
-        });
 
         function backToSite() {
             window.location.href = '../index.html';

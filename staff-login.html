@@ -317,9 +317,11 @@
                     'sales': 'dashboard/sales-dashboard.html',
                     'baker': 'dashboard/baker-dashboard.html',
                     'decorator': 'dashboard/decorator-dashboard.html',
-                    'accountant': 'dashboard/manager-dashboard.html'
+                    'accountant': 'dashboard/accountant-dashboard.html'
                 };
-                window.location.href = dashboardMap[role] || 'dashboard/manager-dashboard.html';
+                // Add cache buster to prevent showing old cached version
+                const dashboardPath = dashboardMap[role] || 'dashboard/manager-dashboard.html';
+                window.location.href = dashboardPath + '?t=' + Date.now();
             } else {
                 alert('Invalid credentials. Please check your username and password.');
             }

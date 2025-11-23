@@ -7,13 +7,12 @@
     <link rel="stylesheet" href="css/dashboard-redesigned.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
     <style>
-        /* Ultra-Compact Dashboard Layout */
+        /* EXACT SAME STYLING AS OTHER DASHBOARDS */
 
-        /* KPI Cards Row */
         .kpi-row {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
-            gap: 10px;
+            gap: 12px;
             margin-bottom: 10px;
         }
 
@@ -25,6 +24,7 @@
             box-shadow: 0 2px 6px rgba(196, 69, 105, 0.2);
             transition: all 0.2s;
             cursor: pointer;
+            text-align: center;
         }
 
         .kpi-card:hover {
@@ -32,20 +32,9 @@
             box-shadow: 0 4px 10px rgba(196, 69, 105, 0.3);
         }
 
-        .kpi-card.green { background: linear-gradient(135deg, #10B981, #059669); box-shadow: 0 2px 6px rgba(16, 185, 129, 0.2); }
-        .kpi-card.green:hover { box-shadow: 0 4px 10px rgba(16, 185, 129, 0.3); }
-
-        .kpi-card.orange { background: linear-gradient(135deg, #F59E0B, #D97706); box-shadow: 0 2px 6px rgba(245, 158, 11, 0.2); }
-        .kpi-card.orange:hover { box-shadow: 0 4px 10px rgba(245, 158, 11, 0.3); }
-
-        .kpi-card.blue { background: linear-gradient(135deg, #3B82F6, #2563EB); box-shadow: 0 2px 6px rgba(59, 130, 246, 0.2); }
-        .kpi-card.blue:hover { box-shadow: 0 4px 10px rgba(59, 130, 246, 0.3); }
-
-        .kpi-icon {
-            font-size: 22px;
-            margin-bottom: 6px;
-            opacity: 0.9;
-        }
+        .kpi-card.green { background: linear-gradient(135deg, #10B981, #059669); }
+        .kpi-card.orange { background: linear-gradient(135deg, #F59E0B, #D97706); }
+        .kpi-card.blue { background: linear-gradient(135deg, #3B82F6, #2563EB); }
 
         .kpi-value {
             font-size: 26px;
@@ -57,10 +46,17 @@
         .kpi-label {
             font-size: 11px;
             opacity: 0.95;
-            font-weight: 500;
+            font-weight: 700;
         }
 
-        /* Quick Action Buttons Bar - Compact & Offset */
+        .kpi-subtitle {
+            display: block;
+            font-size: 10px;
+            color: rgba(255, 255, 255, 0.9);
+            margin-top: 4px;
+            font-weight: 400;
+        }
+
         .quick-actions-bar {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
@@ -73,7 +69,6 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 5px;
             padding: 6px 10px;
             background: white;
             border: 2px solid #E5E7EB;
@@ -83,86 +78,69 @@
             font-weight: 600;
             font-size: 11px;
             transition: all 0.2s;
-            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.12);
         }
 
         .action-btn:hover {
             border-color: #C44569;
             background: #FDF2F8;
-            transform: translateY(-1px);
-            box-shadow: 0 3px 10px rgba(196, 69, 105, 0.2);
         }
 
         .action-btn.primary {
             background: linear-gradient(135deg, #C44569, #9A3350);
             color: white;
             border-color: transparent;
-            box-shadow: 0 2px 6px rgba(196, 69, 105, 0.25);
         }
 
-        .action-btn.primary:hover {
-            background: linear-gradient(135deg, #A33555, #7A2741);
-            box-shadow: 0 3px 10px rgba(196, 69, 105, 0.4);
-        }
-
-        .action-icon {
-            font-size: 14px;
-        }
-
-        /* Charts Section - Smaller */
-        .charts-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 10px;
-            margin-bottom: 10px;
-        }
-
-        .chart-card {
+        .chart-section {
             background: white;
             border-radius: 8px;
-            padding: 12px;
-            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
+            padding: 14px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+            margin-bottom: 16px;
         }
 
         .chart-title {
-            font-size: 12px;
+            font-size: 14px;
             font-weight: 700;
             color: #1F2937;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        .chart-subtitle {
+            display: block;
+            font-size: 11px;
+            color: #C44569;
             margin-bottom: 8px;
-            display: flex;
-            align-items: center;
-            gap: 6px;
+            font-weight: 600;
+            text-align: center;
         }
 
         .chart-container {
-            height: 160px;
+            height: 200px;
             position: relative;
-            border: 2px dashed #C44569; /* Debug border */
         }
 
-        /* Tables Section - Smaller */
         .tables-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 10px;
-            margin-bottom: 10px;
+            gap: 12px;
+            margin-bottom: 16px;
         }
 
         .table-card {
             background: white;
             border-radius: 8px;
-            padding: 12px;
-            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
+            padding: 14px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
         }
 
         .table-title {
-            font-size: 13px;
+            font-size: 14px;
             font-weight: 700;
             color: #1F2937;
-            margin-bottom: 8px;
-            display: flex;
-            align-items: center;
-            gap: 6px;
+            margin-bottom: 10px;
+            text-align: center;
         }
 
         .compact-table {
@@ -175,10 +153,10 @@
         }
 
         .compact-table th {
-            padding: 6px 8px;
-            text-align: left;
-            font-size: 10px;
-            font-weight: 600;
+            padding: 8px 10px;
+            text-align: center;
+            font-size: 11px;
+            font-weight: 700;
             color: #6B7280;
             text-transform: uppercase;
             letter-spacing: 0.3px;
@@ -186,10 +164,11 @@
         }
 
         .compact-table td {
-            padding: 6px 8px;
-            font-size: 11px;
+            padding: 8px 10px;
+            font-size: 12px;
             color: #374151;
             border-bottom: 1px solid #F3F4F6;
+            text-align: center;
         }
 
         .compact-table tbody tr:hover {
@@ -198,21 +177,11 @@
 
         .status-badge {
             display: inline-block;
-            padding: 2px 6px;
+            padding: 3px 8px;
             border-radius: 8px;
             font-size: 10px;
-            font-weight: 600;
+            font-weight: 700;
             text-transform: capitalize;
-        }
-
-        .status-badge.status-baking {
-            background: #FEF3C7;
-            color: #92400E;
-        }
-
-        .status-badge.status-decorating {
-            background: #EDE9FE;
-            color: #6B21A8;
         }
 
         .status-badge.status-ready {
@@ -220,64 +189,32 @@
             color: #065F46;
         }
 
-        /* Schedule Section - Smaller */
-        .schedule-card {
+        .status-badge.status-decorating {
+            background: #EDE9FE;
+            color: #6B21A8;
+        }
+
+        .status-badge.status-approval {
+            background: #DBEAFE;
+            color: #1E40AF;
+        }
+
+        .cancelled-section {
             background: white;
             border-radius: 8px;
-            padding: 12px;
-            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
-        }
-
-        .schedule-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-            gap: 8px;
-        }
-
-        .schedule-item {
-            padding: 10px;
-            background: #F9FAFB;
-            border-radius: 6px;
-            border-left: 3px solid #C44569;
-        }
-
-        .schedule-time {
-            font-weight: 700;
-            color: #C44569;
-            font-size: 11px;
-            margin-bottom: 4px;
-        }
-
-        .schedule-customer {
-            font-weight: 600;
-            color: #1F2937;
-            font-size: 11px;
-            margin-bottom: 2px;
-        }
-
-        .schedule-cake {
-            font-size: 10px;
-            color: #6B7280;
-        }
-
-        @media (max-width: 1200px) {
-            .charts-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
+            padding: 14px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+            margin-top: 16px;
         }
 
         @media (max-width: 768px) {
-            .kpi-row,
-            .quick-actions-bar,
-            .charts-grid,
-            .tables-grid {
+            .kpi-row, .tables-grid {
                 grid-template-columns: 1fr;
             }
         }
     </style>
 </head>
 <body>
-    <!-- HEADER -->
     <header class="header">
         <div class="header-left">
             <div class="header-logo">
@@ -290,344 +227,218 @@
         </div>
     </header>
 
-    <!-- LEFT NAVIGATION -->
     <nav class="nav-sidebar">
         <ul>
             <li><a href="decorator-dashboard.html" class="nav-link active">Dashboard</a></li>
             <li><a href="all-orders.html" class="nav-link">View Orders</a></li>
-            <li><a href="all-customers.html" class="nav-link">View Customers</a></li>
             <li><a href="view-products.html" class="nav-link">View Products</a></li>
             <li><a href="reports.html" class="nav-link">Reports</a></li>
         </ul>
     </nav>
 
-    <!-- MAIN CONTENT -->
     <main class="main-content">
         <div class="content">
             <!-- KPI CARDS -->
             <div class="kpi-row">
-                <div class="kpi-card" onclick="location.href='all-orders.html'">
-                    <div class="kpi-icon">🎨</div>
-                    <div class="kpi-value" id="needs-decoration-count">0</div>
-                    <div class="kpi-label">Needs Decoration</div>
+                <div class="kpi-card">
+                    <div class="kpi-value" id="orders-to-decorate">0</div>
+                    <div class="kpi-label">Orders To Decorate</div>
+                    <small class="kpi-subtitle">Ready from Bakers</small>
                 </div>
-                <div class="kpi-card green" onclick="location.href='all-orders.html'">
-                    <div class="kpi-icon">✅</div>
-                    <div class="kpi-value" id="completed-today-count">0</div>
-                    <div class="kpi-label">Completed Today</div>
+                <div class="kpi-card green">
+                    <div class="kpi-value" id="in-decorating">0</div>
+                    <div class="kpi-label">In Decorating</div>
+                    <small class="kpi-subtitle">Design in Progress</small>
                 </div>
-                <div class="kpi-card orange" onclick="location.href='all-orders.html'">
-                    <div class="kpi-icon">⚡</div>
-                    <div class="kpi-value" id="urgent-orders-count">0</div>
-                    <div class="kpi-label">Urgent Orders</div>
+                <div class="kpi-card orange">
+                    <div class="kpi-value" id="ready-approval">0</div>
+                    <div class="kpi-label">Ready for Final Approval</div>
+                    <small class="kpi-subtitle">Awaiting Manager Sign-off</small>
                 </div>
-                <div class="kpi-card blue" onclick="location.href='all-orders.html'">
-                    <div class="kpi-icon">📝</div>
-                    <div class="kpi-value" id="orders-with-notes-count">0</div>
-                    <div class="kpi-label">Orders With Notes</div>
+                <div class="kpi-card blue">
+                    <div class="kpi-value" id="cancelled-today">0</div>
+                    <div class="kpi-label">Cancelled Today</div>
+                    <small class="kpi-subtitle">Stop Decoration Work</small>
                 </div>
             </div>
 
-            <!-- QUICK ACTIONS BAR -->
+            <!-- QUICK ACTIONS -->
             <div class="quick-actions-bar">
-                <a href="../order-form.html" class="action-btn primary">
-                    <span class="action-icon">➕</span>
-                    <span>Create New Order</span>
-                </a>
-                <a href="new-customer.html" class="action-btn">
-                    <span class="action-icon">👤</span>
-                    <span>Add Customer</span>
-                </a>
-                <a href="view-products.html" class="action-btn">
-                    <span class="action-icon">🎂</span>
-                    <span>View Products</span>
-                </a>
-                <a href="reports.html" class="action-btn">
-                    <span class="action-icon">📊</span>
-                    <span>View Reports</span>
-                </a>
+                <a href="../order-form.html" class="action-btn primary">Create New Order</a>
+                <a href="all-orders.html" class="action-btn">View Decorating Queue</a>
+                <a href="view-products.html" class="action-btn">View Products</a>
+                <a href="reports.html" class="action-btn">Reports</a>
+            </div>
+
+            <!-- CHART -->
+            <div class="chart-section">
+                <h3 class="chart-title">Decoration Time by Cake Type</h3>
+                <small class="chart-subtitle">Average time per product category</small>
+                <div class="chart-container">
+                    <canvas id="decorationTimeChart"></canvas>
+                </div>
             </div>
 
             <!-- TABLES -->
             <div class="tables-grid">
-                <!-- TODAY'S PICKUPS -->
-                <div class="table-card" id="todays-pickups">
-                    <h3 class="table-title"><span>📦</span> Today's Pickups</h3>
+                <div class="table-card">
+                    <h3 class="table-title">Decorating Queue</h3>
                     <table class="compact-table">
                         <thead>
                             <tr>
-                                <th>Time</th>
                                 <th>Customer</th>
-                                <th>Cake</th>
-                                <th>Status</th>
+                                <th>Product</th>
+                                <th>Pickup</th>
+                                <th>Design Notes</th>
                             </tr>
                         </thead>
-                        <tbody id="todays-pickups-tbody">
+                        <tbody id="decorating-queue-tbody">
                             <tr><td colspan="4" style="text-align: center; padding: 20px;">Loading...</td></tr>
                         </tbody>
                     </table>
                 </div>
 
-                <!-- RECENT ORDERS -->
                 <div class="table-card">
-                    <h3 class="table-title"><span>📋</span> Recent Orders</h3>
+                    <h3 class="table-title">Ready for Approval</h3>
                     <table class="compact-table">
                         <thead>
                             <tr>
-                                <th>ID</th>
                                 <th>Customer</th>
-                                <th>Status</th>
-                                <th>Total</th>
+                                <th>Product</th>
+                                <th>Summary</th>
+                                <th>Size</th>
                             </tr>
                         </thead>
-                        <tbody id="recent-orders-tbody">
+                        <tbody id="approval-tbody">
                             <tr><td colspan="4" style="text-align: center; padding: 20px;">Loading...</td></tr>
                         </tbody>
                     </table>
                 </div>
             </div>
 
-            <!-- TOMORROW'S SCHEDULE -->
-            <div class="schedule-card">
-                <h3 class="table-title"><span>📅</span> Tomorrow's Schedule</h3>
-                <div class="schedule-grid" id="tomorrows-schedule">
-                    <div class="schedule-item">
-                        <div class="schedule-time">9:00 AM</div>
-                        <div class="schedule-customer">Sarah Johnson</div>
-                        <div class="schedule-cake">Chocolate Velvet</div>
-                    </div>
-                    <div class="schedule-item">
-                        <div class="schedule-time">11:30 AM</div>
-                        <div class="schedule-customer">John Smith</div>
-                        <div class="schedule-cake">Strawberry Bliss</div>
-                    </div>
-                    <div class="schedule-item">
-                        <div class="schedule-time">2:00 PM</div>
-                        <div class="schedule-customer">Mike Brown</div>
-                        <div class="schedule-cake">Vanilla Dream</div>
-                    </div>
-                    <div class="schedule-item">
-                        <div class="schedule-time">3:00 PM</div>
-                        <div class="schedule-customer">Lisa Wilson</div>
-                        <div class="schedule-cake">Lemon Zest</div>
-                    </div>
-                    <div class="schedule-item">
-                        <div class="schedule-time">4:30 PM</div>
-                        <div class="schedule-customer">Emily Davis</div>
-                        <div class="schedule-cake">Red Velvet</div>
-                    </div>
-                </div>
+            <!-- CANCELLED ORDERS -->
+            <div class="cancelled-section">
+                <h3 class="table-title">Cancelled Orders</h3>
+                <table class="compact-table">
+                    <thead>
+                        <tr>
+                            <th>Order ID</th>
+                            <th>Customer</th>
+                            <th>Product</th>
+                            <th>Reason</th>
+                            <th>Stage Cancelled</th>
+                        </tr>
+                    </thead>
+                    <tbody id="cancelled-tbody">
+                        <tr><td colspan="5" style="text-align: center; padding: 20px;">No cancelled orders</td></tr>
+                    </tbody>
+                </table>
             </div>
         </div>
     </main>
 
+    <script src="./js/unified-mock-data.js"></script>
     <script src="js/main.js"></script>
     <script>
-        // Mock dashboard data
-        const dashboardData = {
-            orders: [
-                { id: 'ORD001', customer: 'Sarah Johnson', status: 'ready', total: 145, pickup: '10:00 AM', cake: 'Chocolate Velvet' },
-                { id: 'ORD002', customer: 'Mike Brown', status: 'decorating', total: 120, pickup: '2:00 PM', cake: 'Vanilla Dream' },
-                { id: 'ORD003', customer: 'Emily Davis', status: 'baking', total: 165, pickup: '4:30 PM', cake: 'Red Velvet' },
-                { id: 'ORD004', customer: 'John Smith', status: 'ready', total: 135, pickup: '11:30 AM', cake: 'Strawberry Bliss' },
-                { id: 'ORD005', customer: 'Lisa Wilson', status: 'ready', total: 150, pickup: '3:00 PM', cake: 'Lemon Zest' },
-                { id: 'ORD006', customer: 'David Clark', status: 'baking', total: 175, pickup: '5:00 PM', cake: 'Black Forest' }
-            ]
-        };
-
         document.addEventListener('DOMContentLoaded', () => {
             if (!checkAuthentication()) return;
             updateHeaderWithUserInfo();
             initializeNav();
-            initializeDECORATORDashboard();
+            initializeDecoratorDashboard();
         });
 
-        function initializeDECORATORDashboard() {
+        function initializeDecoratorDashboard() {
+            localStorage.setItem('staffRole', 'decorator');
+            
             // Calculate KPIs
-            const todaysPickups = dashboardData.orders.filter(o => o.status === 'ready');
-            const weeklyRevenue = dashboardData.orders.reduce((sum, o) => sum + o.total, 0);
-
-            // Update KPI values
-            document.getElementById('todays-pickups-count').textContent = todaysPickups.length;
-            document.getElementById('total-orders-count').textContent = dashboardData.orders.length;
-            document.getElementById('weekly-revenue').textContent = '$' + weeklyRevenue.toFixed(0);
-            document.getElementById('new-customers-count').textContent = '12';
-
-            // Populate tables
-            populateTodaysPickups();
-            populateRecentOrders();
-
-            // Initialize charts
+            const ordersToDecorate = unifiedMockData.orders.filter(o => o.statusId === 3).length;
+            const inDecorating = 2; // Mock
+            const readyApproval = unifiedMockData.orders.filter(o => o.statusId === 4).length;
+            const cancelledToday = 0; // Mock
+            
+            document.getElementById('orders-to-decorate').textContent = ordersToDecorate;
+            document.getElementById('in-decorating').textContent = inDecorating;
+            document.getElementById('ready-approval').textContent = readyApproval;
+            document.getElementById('cancelled-today').textContent = cancelledToday;
+            
+            populateDecoratingQueue();
+            populateReadyForApproval();
+            
             setTimeout(() => {
-                const debugDiv = document.createElement('div');
-                debugDiv.style.position = 'fixed';
-                debugDiv.style.top = '0';
-                debugDiv.style.right = '0';
-                debugDiv.style.background = '#fff';
-                debugDiv.style.color = '#C44569';
-                debugDiv.style.fontWeight = 'bold';
-                debugDiv.style.zIndex = '9999';
-                debugDiv.style.padding = '8px 16px';
-                debugDiv.style.border = '2px solid #C44569';
-                debugDiv.style.display = 'none';
-                debugDiv.id = 'chartjs-debug';
-                document.body.appendChild(debugDiv);
-                // Charts removed for Decorator dashboard
-            }, 200);
+                if (typeof Chart !== 'undefined') {
+                    initializeChart();
+                }
+            }, 100);
         }
 
-        function populateTodaysPickups() {
-            const tbody = document.getElementById('todays-pickups-tbody');
-            const pickups = dashboardData.orders.filter(o => o.status === 'ready');
-
-            if (pickups.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="4" style="text-align: center; padding: 20px; color: #9CA3AF;">No pickups today</td></tr>';
+        function populateDecoratingQueue() {
+            const tbody = document.getElementById('decorating-queue-tbody');
+            const queue = unifiedMockData.orders.filter(o => o.statusId === 3).slice(0, 8);
+            
+            if (queue.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="4" style="text-align: center; padding: 20px;">No orders in decorating queue</td></tr>';
                 return;
             }
-
-            tbody.innerHTML = pickups.map(order => `
+            
+            tbody.innerHTML = queue.map(order => `
                 <tr>
-                    <td><strong>${order.pickup}</strong></td>
-                    <td>${order.customer}</td>
-                    <td>${order.cake}</td>
-                    <td><span class="status-badge status-${order.status}">${order.status}</span></td>
+                    <td>${unifiedMockData.getCustomerName(order.customerId)}</td>
+                    <td>${unifiedMockData.getProductName(order.productId)}</td>
+                    <td>${order.pickupDate}</td>
+                    <td>${order.decorationNotes || 'Standard design'}</td>
                 </tr>
             `).join('');
         }
 
-        function populateRecentOrders() {
-            const tbody = document.getElementById('recent-orders-tbody');
-            const orders = dashboardData.orders.slice(0, 5);
-
-            tbody.innerHTML = orders.map(order => `
-                <tr>
-                    <td><strong>${order.id}</strong></td>
-                    <td>${order.customer}</td>
-                    <td><span class="status-badge status-${order.status}">${order.status}</span></td>
-                    <td><strong>$${order.total}</strong></td>
-                </tr>
-            `).join('');
-        }
-
-        function initializeCharts() {
-            // Revenue Trend Chart
-            const revenueCtx = document.getElementById('revenueChart');
-            if (revenueCtx) {
-                new Chart(revenueCtx, {
-                    type: 'line',
-                    data: {
-                        labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
-                        datasets: [{
-                            label: 'Revenue',
-                            data: [340, 420, 380, 510, 460, 390, 435],
-                            borderColor: '#C44569',
-                            backgroundColor: 'rgba(196, 69, 105, 0.1)',
-                            fill: true,
-                            tension: 0.4,
-                            pointRadius: 4,
-                            pointHoverRadius: 6,
-                            pointBackgroundColor: '#C44569',
-                            pointBorderColor: '#fff',
-                            pointBorderWidth: 2
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        plugins: {
-                            legend: { display: false }
-                        },
-                        scales: {
-                            y: {
-                                beginAtZero: true,
-                                ticks: {
-                                    callback: v => '$' + v,
-                                    font: { size: 11 }
-                                },
-                                grid: { color: '#F3F4F6' }
-                            },
-                            x: {
-                                ticks: { font: { size: 11 } },
-                                grid: { display: false }
-                            }
-                        }
-                    }
-                });
+        function populateReadyForApproval() {
+            const tbody = document.getElementById('approval-tbody');
+            const ready = unifiedMockData.orders.filter(o => o.statusId === 4).slice(0, 8);
+            
+            if (ready.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="4" style="text-align: center; padding: 20px;">No cakes ready for approval</td></tr>';
+                return;
             }
+            
+            tbody.innerHTML = ready.map(order => `
+                <tr>
+                    <td>${unifiedMockData.getCustomerName(order.customerId)}</td>
+                    <td>${unifiedMockData.getProductName(order.productId)}</td>
+                    <td>Decorated & Ready</td>
+                    <td>${order.cakeSize || '9"'}</td>
+                </tr>
+            `).join('');
+        }
 
-            // Popular Products Chart
-            const productsCtx = document.getElementById('productsChart');
-            if (productsCtx) {
-                new Chart(productsCtx, {
+        function initializeChart() {
+            const ctx = document.getElementById('decorationTimeChart');
+            if (ctx) {
+                new Chart(ctx, {
                     type: 'bar',
                     data: {
-                        labels: ['Chocolate', 'Vanilla', 'Red Velvet', 'Strawberry', 'Lemon'],
+                        labels: ['Cakes', 'Cupcakes', 'Cookies', 'Pastries', 'Petit Fours'],
                         datasets: [{
-                            label: 'Orders',
-                            data: [12, 10, 8, 7, 6],
-                            backgroundColor: '#10B981',
-                            borderRadius: 6,
-                            borderSkipped: false
+                            label: 'Avg Time (minutes)',
+                            data: [45, 30, 20, 25, 15],
+                            backgroundColor: ['#C44569', '#F59E0B', '#10B981', '#3B82F6', '#A855F7'],
+                            borderRadius: 6
                         }]
                     },
                     options: {
                         indexAxis: 'y',
                         responsive: true,
                         maintainAspectRatio: false,
-                        plugins: {
-                            legend: { display: false }
-                        },
+                        plugins: { legend: { display: false } },
                         scales: {
-                            x: {
+                            x: { 
                                 beginAtZero: true,
-                                ticks: { font: { size: 11 } },
-                                grid: { color: '#F3F4F6' }
+                                ticks: { font: { size: 11 } }
                             },
-                            y: {
-                                ticks: { font: { size: 11 } },
-                                grid: { display: false }
-                            }
-                        }
-                    }
-                });
-            }
-
-            // Order Status Chart
-            const statusCtx = document.getElementById('statusChart');
-            if (statusCtx) {
-                new Chart(statusCtx, {
-                    type: 'doughnut',
-                    data: {
-                        labels: ['Ready', 'Decorating', 'Baking'],
-                        datasets: [{
-                            data: [3, 1, 2],
-                            backgroundColor: ['#10B981', '#A855F7', '#F59E0B'],
-                            borderColor: '#fff',
-                            borderWidth: 3
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        plugins: {
-                            legend: {
-                                position: 'bottom',
-                                labels: {
-                                    font: { size: 11 },
-                                    usePointStyle: true,
-                                    padding: 12
-                                }
-                            }
+                            y: { ticks: { font: { size: 11 } } }
                         }
                     }
                 });
             }
         }
-
-        // Set decorator role on page load
-        document.addEventListener('DOMContentLoaded', function() {
-            localStorage.setItem('staffRole', 'decorator');
-        });
 
         function backToSite() {
             window.location.href = '../index.html';
@@ -641,4 +452,3 @@
     </script>
 </body>
 </html>
-

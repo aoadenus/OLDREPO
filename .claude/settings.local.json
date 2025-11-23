@@ -11,7 +11,11 @@
       "Bash(del \"c:\\Users\\adere\\Desktop\\EBCWIP\\dashboard\\view-products-utf8.html\")",
       "Bash(echo:*)",
       "Bash(start manager-dashboard.html)",
-      "Bash(git restore:*)"
+      "Bash(git restore:*)",
+      "Bash(dir:*)",
+      "Bash(python:*)",
+      "Bash(del sales-dashboard.html)",
+      "Bash(ren:*)"
     ],
     "deny": [],
     "ask": []
