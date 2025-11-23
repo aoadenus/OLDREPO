@@ -590,6 +590,28 @@
     </style>
 </head>
 <body>
+    <!-- BACK BUTTON BAR -->
+    <div style="padding: 12px 20px; background: white; border-bottom: 2px solid #e5e7eb;">
+        <div style="max-width: 1200px; margin: 0 auto;">
+            <button onclick="window.history.back()" style="
+                background: white;
+                color: #C44569;
+                border: 2px solid #C44569;
+                padding: 8px 20px;
+                border-radius: 6px;
+                font-weight: 600;
+                cursor: pointer;
+                display: inline-flex;
+                align-items: center;
+                gap: 8px;
+                transition: all 0.2s;
+                font-size: 14px;
+            " onmouseover="this.style.background='#C44569'; this.style.color='white';" onmouseout="this.style.background='white'; this.style.color='#C44569';">
+                ← Back to Dashboard
+            </button>
+        </div>
+    </div>
+
     <div class="wizard-container">
         <!-- HEADER -->
         <div class="wizard-header">

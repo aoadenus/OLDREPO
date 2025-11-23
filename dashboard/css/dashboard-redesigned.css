@@ -2551,14 +2551,28 @@ textarea.form-control {
     font-weight: 600;
 }
 
-.customer-type-badge.retail {
-    background: #DBEAFE;
-    color: #1E40AF;
+.customer-type-badge.retail,
+.customer-type-retail {
+    background: #DBEAFE;  /* Light Blue */
+    color: #1E40AF;       /* Dark Blue */
+    border: 1px solid #3B82F6;
 }
 
-.customer-type-badge.corporate {
-    background: #E0E7FF;
-    color: #4338CA;
+.customer-type-badge.corporate,
+.customer-type-corporate {
+    background: #FEF3C7;  /* Light Yellow */
+    color: #92400E;       /* Dark Brown */
+    border: 1px solid #F59E0B;
+}
+
+.type-badge {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
 }
 
 /* ═══════════════════════════════════════════════════════════════════ */
