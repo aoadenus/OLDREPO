@@ -446,7 +446,14 @@
         });
 
         function initializeSalesDashboard() {
+            // Verify data is loaded
+            if (typeof unifiedMockData === 'undefined') {
+                console.error('❌ ERROR: unified-mock-data.js not loaded!');
+                return;
+            }
+            console.log('✅ Mock data loaded:', unifiedMockData.orders.length, 'orders,', unifiedMockData.customers.length, 'customers');
             console.log('Initializing Sales Dashboard...');
+            
             localStorage.setItem('staffRole', 'sales');
             
             // ═══════════════════════════════════════════════════════
