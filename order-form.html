@@ -7,6 +7,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Poppins:wght@400;600&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+    <script src="dashboard/js/unified-mock-data.js"></script>
     <style>
         * {
             margin: 0;
@@ -349,9 +350,9 @@
 </head>
 <body>
     <div class="container">
-        <a href="dashboard/index.html" class="back-btn" aria-label="Back to Dashboard">← Dashboard</a>
+        <a href="javascript:history.back()" class="back-btn" aria-label="Back to Dashboard">← Back</a>
         <div class="header">
-            <img src="public/ebc-cake-images/logo.png" alt="Emily Bakes Cakes logo" class="logo" />
+            <img src="dashboard/images/logo.png" alt="Emily Bakes Cakes logo" class="logo" />
             <div class="header-text">
                 <h1>Cake Order Form</h1>
                 <p>Customize your perfect celebration cake</p>
@@ -628,20 +629,120 @@
             e.preventDefault();
             
             const formData = new FormData(form);
-            const orderData = {};
-            formData.forEach((value, key) => {
-                orderData[key] = value;
-            });
             
-            orderData.total_amount = document.getElementById('totalAmount').textContent;
-            orderData.deposit_amount = document.getElementById('depositAmount').textContent;
+            // Extract form data
+            const customerName = formData.get('customer_name');
+            const customerPhone = formData.get('customer_phone');
+            const customerEmail = formData.get('customer_email') || '';
+            const customerAddress = formData.get('customer_address');
+            const pickupDate = formData.get('pickup_date');
+            const pickupTime = formData.get('pickup_time');
+            const cakeSize = formData.get('size');
+            const occasion = formData.get('occasion') || '';
+            const specialInstructions = formData.get('special_instructions') || '';
             
-            console.log('Order submitted:', orderData);
+            // Get pricing
+            const totalPrice = parseFloat(document.getElementById('totalAmount').textContent.replace('$', ''));
+            const depositAmount = parseFloat(document.getElementById('depositAmount').textContent.replace('$', ''));
             
-            alert('Order submitted successfully! In a production environment, this would be sent to the server.\n\nOrder Details:\n' + JSON.stringify(orderData, null, 2));
+            // Build layer details string
+            const numLayers = parseInt(formData.get('layers')) || 1;
+            let layerDetails = [];
+            for (let i = 1; i <= numLayers; i++) {
+                const flavor = formData.get(`flavor_layer${i}`) || '';
+                const filling = formData.get(`filling_layer${i}`) || '';
+                const icingFlavor = formData.get(`icing_flavor_layer${i}`) || '';
+                const icingColor = formData.get(`icing_color_layer${i}`) || '';
+                const writingText = formData.get(`writing_text_layer${i}`) || '';
+                const decorations = formData.get(`cake_decorations_layer${i}`) || '';
+                
+                layerDetails.push(`Layer ${i}: ${flavor} cake, ${filling} filling, ${icingFlavor} icing (${icingColor})${writingText ? ', Text: "' + writingText + '"' : ''}${decorations ? ', Decorations: ' + decorations : ''}`);
+            }
             
-            form.reset();
-            updatePricing();
+            const notes = `${occasion ? 'Occasion: ' + occasion + '. ' : ''}${layerDetails.join(' | ')}${specialInstructions ? '. Special: ' + specialInstructions : ''}`;
+            const decorationNotes = layerDetails.join(' | ');
+            
+            // Check if customer exists by phone number
+            let customer = unifiedMockData.customers.find(c => 
+                c.mobilePhone === customerPhone || 
+                c.email === customerEmail
+            );
+            
+            // If customer doesn't exist, create new customer
+            if (!customer) {
+                const newCustomerId = Math.max(...unifiedMockData.customers.map(c => c.id)) + 1;
+                const nameParts = customerName.trim().split(' ');
+                const firstName = nameParts[0];
+                const lastName = nameParts.slice(1).join(' ') || firstName;
+                
+                customer = {
+                    id: newCustomerId,
+                    statusId: 1,
+                    typeId: 1,
+                    companyName: null,
+                    firstName: firstName,
+                    middleInitial: null,
+                    lastName: lastName,
+                    addressLine1: customerAddress,
+                    addressLine2: null,
+                    stateId: 48,
+                    countryId: 1,
+                    zipCode: customerAddress.match(/\d{5}$/)?.[0] || '00000',
+                    mobilePhone: customerPhone,
+                    workPhone: null,
+                    homePhone: null,
+                    email: customerEmail,
+                    comments: `New customer from order form - ${new Date().toLocaleDateString()}`,
+                    isPreferred: 'N'
+                };
+                
+                unifiedMockData.customers.push(customer);
+                console.log('Created new customer:', customer);
+            }
+            
+            // Create new order
+            const newOrderId = Math.max(...unifiedMockData.orders.map(o => o.id)) + 1;
+            const today = new Date().toISOString().split('T')[0];
+            
+            // Find appropriate product based on size (or use a default)
+            const productId = 1; // Default to Lemon Doberge, can be enhanced
+            
+            const newOrder = {
+                id: newOrderId,
+                customerId: customer.id,
+                productId: productId,
+                orderDate: today,
+                pickupDate: pickupDate,
+                pickupTime: pickupTime + ':00',
+                totalPrice: totalPrice,
+                depositAmount: depositAmount,
+                paymentMethod: 'Pending', // Can be updated later
+                salesStaffId: 101, // Default sales staff
+                lastEmployeeId: 101,
+                statusId: 1, // To Be Created
+                isCancelled: 'N',
+                finalApprovalId: null,
+                notes: notes,
+                cakeSize: cakeSize + '"',
+                decorationNotes: decorationNotes
+            };
+            
+            unifiedMockData.orders.push(newOrder);
+            
+            console.log('Order created successfully:', newOrder);
+            
+            // Show success message with order details
+            alert(`✅ Order Submitted Successfully!\n\nOrder #${newOrderId}\nCustomer: ${customerName}\nPickup: ${pickupDate} at ${pickupTime}\nTotal: $${totalPrice.toFixed(2)}\nDeposit Paid: $${depositAmount.toFixed(2)}\n\n${customer.id === newCustomerId ? 'New customer account created!' : 'Existing customer account used.'}\n\nYour order has been added to the system.`);
+            
+            // Option 1: Redirect to dashboard orders page
+            setTimeout(() => {
+                window.location.href = 'dashboard/all-orders.html';
+            }, 1000);
+            
+            // Option 2: Just reset form (comment out redirect above if using this)
+            // form.reset();
+            // updateLayers();
+            // updatePricing();
         });
 
         // Auto-format phone input as xxx-xxx-xxxx while typing

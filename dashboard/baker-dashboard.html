@@ -234,10 +234,11 @@
 
     <nav class="nav-sidebar">
         <ul>
-            <li><a href="baker-dashboard.html" class="nav-link active">Dashboard</a></li>
-            <li><a href="all-orders.html" class="nav-link">View Orders</a></li>
-            <li><a href="view-products.html" class="nav-link">View Products</a></li>
-            <li><a href="reports.html" class="nav-link">Reports</a></li>
+            <li><a href="baker-dashboard.html" class="nav-link active">🏠 Dashboard</a></li>
+            <li><a href="all-orders.html" class="nav-link">📋 View Orders</a></li>
+            <li><a href="all-customers.html" class="nav-link">👥 View Customers</a></li>
+            <li><a href="view-products.html" class="nav-link">🍰 View Products</a></li>
+            <li><a href="reports.html" class="nav-link">📈 Reports</a></li>
         </ul>
     </nav>
 
@@ -269,7 +270,7 @@
 
             <!-- QUICK ACTIONS -->
             <div class="quick-actions-bar">
-                <a href="../order-form.html" class="action-btn primary">Create New Order</a>
+                <a href="../order-form-wizard.html" class="action-btn primary">Create New Order</a>
                 <a href="all-orders.html" class="action-btn">View Baking Queue</a>
                 <a href="view-products.html" class="action-btn">View Products</a>
                 <a href="reports.html" class="action-btn">Reports</a>
@@ -357,10 +358,10 @@
             localStorage.setItem('staffRole', 'baker');
             
             // Calculate KPIs
-            const ordersToBake = unifiedMockData.orders.filter(o => o.statusId === 1).length;
-            const inBaking = unifiedMockData.orders.filter(o => o.statusId === 2).length;
-            const readyDecoration = unifiedMockData.orders.filter(o => o.statusId === 3).length;
-            const cancelledToday = 0; // Mock
+            const ordersToBake = unifiedMockData.orders.filter(o => o.statusId === 1 && o.isCancelled !== 'Y').length;
+            const inBaking = unifiedMockData.orders.filter(o => o.statusId === 2 && o.isCancelled !== 'Y').length;
+            const readyDecoration = unifiedMockData.orders.filter(o => o.statusId === 3 && o.isCancelled !== 'Y').length;
+            const cancelledToday = unifiedMockData.orders.filter(o => o.isCancelled === 'Y').length;
             
             document.getElementById('orders-to-bake').textContent = ordersToBake;
             document.getElementById('in-baking').textContent = inBaking;
@@ -369,6 +370,7 @@
             
             populateBakingQueue();
             populateMovingToDecorating();
+            populateCancelledOrders();
             
             setTimeout(() => {
                 if (typeof Chart !== 'undefined') {
@@ -444,6 +446,33 @@
                     }
                 });
             }
+        }
+
+        function populateCancelledOrders() {
+            const cancelledOrders = unifiedMockData.orders.filter(o => o.isCancelled === 'Y');
+            const tbody = document.getElementById('cancelled-tbody');
+            
+            if (cancelledOrders.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="5" style="text-align: center; padding: 20px;">No cancelled orders</td></tr>';
+                return;
+            }
+            
+            tbody.innerHTML = cancelledOrders.map(order => {
+                const customer = unifiedMockData.customers.find(c => c.id === order.customerId);
+                const product = unifiedMockData.products.find(p => p.id === order.productId);
+                const status = unifiedMockData.orderStatuses.find(s => s.id === order.statusId);
+                
+                return `
+                    <tr>
+                        <td>#${order.id}</td>
+                        <td>${customer ? customer.firstName + ' ' + customer.lastName : 'Unknown'}</td>
+                        <td>${product ? product.name : 'Unknown'}</td>
+                        <td>${order.pickupDate}</td>
+                        <td>${status ? status.name : 'Unknown'}</td>
+                        <td>${order.notes || 'No notes'}</td>
+                    </tr>
+                `;
+            }).join('');
         }
 
         function backToSite() {

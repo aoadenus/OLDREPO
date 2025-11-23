@@ -264,7 +264,7 @@
 
             <!-- QUICK ACTIONS -->
             <div class="quick-actions-bar">
-                <a href="../order-form.html" class="action-btn primary">Create New Order</a>
+                <a href="../order-form-wizard.html" class="action-btn primary">Create New Order</a>
                 <a href="all-orders.html" class="action-btn">View Decorating Queue</a>
                 <a href="view-products.html" class="action-btn">View Products</a>
                 <a href="reports.html" class="action-btn">Reports</a>
@@ -351,10 +351,10 @@
             localStorage.setItem('staffRole', 'decorator');
             
             // Calculate KPIs
-            const ordersToDecorate = unifiedMockData.orders.filter(o => o.statusId === 3).length;
-            const inDecorating = 2; // Mock
-            const readyApproval = unifiedMockData.orders.filter(o => o.statusId === 4).length;
-            const cancelledToday = 0; // Mock
+            const ordersToDecorate = unifiedMockData.orders.filter(o => o.statusId === 3 && o.isCancelled !== 'Y').length;
+            const inDecorating = unifiedMockData.orders.filter(o => o.statusId === 3 && o.isCancelled !== 'Y').length;
+            const readyApproval = unifiedMockData.orders.filter(o => o.statusId === 4 && o.isCancelled !== 'Y').length;
+            const cancelledToday = unifiedMockData.orders.filter(o => o.isCancelled === 'Y').length;
             
             document.getElementById('orders-to-decorate').textContent = ordersToDecorate;
             document.getElementById('in-decorating').textContent = inDecorating;
@@ -363,6 +363,7 @@
             
             populateDecoratingQueue();
             populateReadyForApproval();
+            populateCancelledOrders();
             
             setTimeout(() => {
                 if (typeof Chart !== 'undefined') {
@@ -438,6 +439,35 @@
                     }
                 });
             }
+        }
+
+        function populateCancelledOrders() {
+            const cancelledOrders = unifiedMockData.orders.filter(o => o.isCancelled === 'Y');
+            const tbody = document.getElementById('cancelled-tbody');
+            
+            if (!tbody) return; // Exit if table doesn't exist
+            
+            if (cancelledOrders.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="6" style="text-align: center; padding: 20px;">No cancelled orders</td></tr>';
+                return;
+            }
+            
+            tbody.innerHTML = cancelledOrders.map(order => {
+                const customer = unifiedMockData.customers.find(c => c.id === order.customerId);
+                const product = unifiedMockData.products.find(p => p.id === order.productId);
+                const status = unifiedMockData.orderStatuses.find(s => s.id === order.statusId);
+                
+                return `
+                    <tr>
+                        <td>#${order.id}</td>
+                        <td>${customer ? customer.firstName + ' ' + customer.lastName : 'Unknown'}</td>
+                        <td>${product ? product.name : 'Unknown'}</td>
+                        <td>${order.pickupDate}</td>
+                        <td>${status ? status.name : 'Unknown'}</td>
+                        <td>${order.notes || 'No notes'}</td>
+                    </tr>
+                `;
+            }).join('');
         }
 
         function backToSite() {
