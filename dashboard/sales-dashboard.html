@@ -475,9 +475,26 @@
             ).length;
             
             // KPI 4: New Customers This Week
-            const newCustomersWeek = unifiedMockData.customers.filter(c => 
-                c.id > 30 && c.statusId === 1
-            ).length;
+            // Calculate the start of the week (7 days before today)
+            const startOfWeek = new Date('2025-11-23');
+            startOfWeek.setDate(startOfWeek.getDate() - 7);
+            const weekStartStr = startOfWeek.toISOString().split('T')[0];
+            
+            // Find customers who placed their first order this week
+            const customersWithFirstOrderThisWeek = new Set();
+            unifiedMockData.orders.forEach(order => {
+                // Check if order is from this week
+                if (order.orderDate >= weekStartStr && order.orderDate <= TODAY) {
+                    // Check if this is the customer's first order
+                    const customerOrders = unifiedMockData.orders.filter(o => o.customerId === order.customerId);
+                    const firstOrderDate = Math.min(...customerOrders.map(o => new Date(o.orderDate)));
+                    const firstOrderStr = new Date(firstOrderDate).toISOString().split('T')[0];
+                    if (firstOrderStr >= weekStartStr && firstOrderStr <= TODAY) {
+                        customersWithFirstOrderThisWeek.add(order.customerId);
+                    }
+                }
+            });
+            const newCustomersWeek = customersWithFirstOrderThisWeek.size;
             
             // Update KPI displays
             document.getElementById('orders-created-today').textContent = ordersCreatedToday;
