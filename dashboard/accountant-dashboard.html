@@ -462,7 +462,14 @@
         });
 
         function initializeAccountantDashboard() {
+            // Verify data is loaded
+            if (typeof unifiedMockData === 'undefined') {
+                console.error('❌ ERROR: unified-mock-data.js not loaded!');
+                return;
+            }
+            console.log('✅ Mock data loaded:', unifiedMockData.orders.length, 'orders,', unifiedMockData.customers.length, 'customers');
             console.log('Initializing Accountant Dashboard...');
+            
             localStorage.setItem('staffRole', 'accountant');
             
             // Hardcoded demo date (Nov 23, 2025)
@@ -470,7 +477,7 @@
             
             // Calculate financial KPIs - TODAY'S ORDERS ONLY
             const todaysOrders = unifiedMockData.orders.filter(o => 
-                o.orderDate === today && o.isCancelled === 'N'
+                o.orderDate === today && o.statusId !== 6
             );
             const todaysRevenue = todaysOrders.reduce((sum, o) => sum + o.totalPrice, 0);
             const depositRevenue = todaysOrders.reduce((sum, o) => sum + o.depositAmount, 0);
@@ -481,12 +488,12 @@
             const completedOrders = completedToday.length;
             const completedRevenue = completedToday.reduce((sum, o) => sum + o.totalPrice, 0);
             
-            // Calculate refunds THIS WEEK (Nov 21-27)
-            const weekStart = new Date('2025-11-21');
-            const weekEnd = new Date('2025-11-27');
+            // Calculate refunds THIS WEEK (Nov 17-23)
+            const weekStart = new Date('2025-11-17');
+            const weekEnd = new Date('2025-11-23');
             const cancelledOrders = unifiedMockData.orders.filter(o => {
                 const orderDate = new Date(o.orderDate);
-                return o.isCancelled === 'Y' && 
+                return o.statusId === 6 && 
                        orderDate >= weekStart && 
                        orderDate <= weekEnd;
             });
@@ -517,7 +524,7 @@
                 const orderDate = new Date(o.orderDate);
                 return orderDate >= summaryStart && 
                        orderDate <= summaryEnd && 
-                       o.isCancelled === 'N';
+                       o.statusId !== 6;
             });
             const weeklyRevenue = weekOrders.reduce((sum, o) => sum + o.totalPrice, 0);
             const weeklyDeposits = weekOrders.reduce((sum, o) => sum + o.depositAmount, 0);
@@ -550,7 +557,7 @@
             
             const today = '2025-11-23';
             const transactions = unifiedMockData.orders
-                .filter(o => o.orderDate === today && o.isCancelled === 'N')
+                .filter(o => o.orderDate === today && o.statusId !== 6)
                 .sort((a, b) => b.id - a.id)
                 .slice(0, 10)
                 .map(order => ({
@@ -582,7 +589,7 @@
             if (!tbody) return;
             
             const balances = unifiedMockData.orders
-                .filter(o => o.isCancelled === 'N' && o.statusId < 5) // Not cancelled, not picked up
+                .filter(o => o.statusId !== 6 && o.statusId < 5) // Not cancelled, not picked up
                 .map(order => ({
                     id: order.id,
                     customer: unifiedMockData.getCustomerName(order.customerId),

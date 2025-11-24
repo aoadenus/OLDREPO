@@ -615,22 +615,44 @@
     <script src="js/main.js"></script>
     <script src="js/unified-mock-data.js"></script>
     <script>
-        // Load all customers from unified mock data
-        let allCustomers = unifiedMockData.customers.map(customer => {
+        // Get today's date for daily filtering
+        const TODAY = '2025-11-23';
+        
+        // Load all customers from unified mock data - DAILY LOGIC: Show only active customers
+        let allCustomers = unifiedMockData.customers
+            .filter(customer => customer.status === 'Active')
+            .map(customer => {
             const customerOrders = unifiedMockData.orders.filter(o => o.customerId === customer.id);
-            const customerType = unifiedMockData.customerTypes.find(t => t.id === customer.typeId);
+            
+            // Build full name
+            const middleInitial = customer.middleInitial ? ` ${customer.middleInitial}.` : '';
+            const fullName = `${customer.firstName}${middleInitial} ${customer.lastName}`;
+            
+            // Calculate join date from first order
+            const joinDate = customer.lastOrderDate || (customerOrders.length > 0 
+                ? customerOrders.sort((a, b) => new Date(a.orderDate) - new Date(b.orderDate))[0].orderDate 
+                : '2025-01-01');
             
             return {
                 id: customer.id,
-                name: customer.companyName || `${customer.firstName} ${customer.lastName}`,
+                firstName: customer.firstName,
+                middleInitial: customer.middleInitial,
+                lastName: customer.lastName,
+                name: fullName,
                 email: customer.email,
-                phone: customer.phone || customer.mobilePhone,
-                address: customer.addressLine1 + (customer.addressLine2 ? `, ${customer.addressLine2}` : ''),
-                joinDate: customerOrders.length > 0 ? customerOrders.sort((a, b) => new Date(a.orderDate) - new Date(b.orderDate))[0].orderDate : '2025-01-01',
+                phone: customer.phone,
+                address: customer.address,
+                city: customer.city,
+                state: customer.state,
+                zip: customer.zip,
+                type: customer.type,
+                status: customer.status,
+                joinDate: joinDate,
                 orders: customerOrders.length,
-                type: customer.isPreferred === 'Y' ? 'repeat' : 'new',
-                customerType: customerType ? customerType.description : 'Unknown',
-                customerTypeShort: customer.typeId === 2 ? 'Corporate' : 'Retail'
+                lifetimeValue: customer.lifetimeValue || 0,
+                lastOrderDate: customer.lastOrderDate,
+                customerType: customer.type,
+                customerTypeShort: customer.type
             };
         });
 
@@ -727,35 +749,38 @@
                 return;
             }
             
-            const customerType = unifiedMockData.customerTypes.find(t => t.id === customer.typeId);
-            const customerStatus = customer.statusId === 1 ? 'Active' : 'Inactive';
+            const middleInitial = customer.middleInitial ? ` ${customer.middleInitial}.` : '';
+            const fullName = `${customer.firstName}${middleInitial} ${customer.lastName}`;
             const customerOrders = unifiedMockData.orders.filter(o => o.customerId === customer.id);
+            const fullAddress = `${customer.address}, ${customer.city}, ${customer.state} ${customer.zip}`;
             
-            document.getElementById('viewCustomerName').textContent = customer.companyName || `${customer.firstName} ${customer.lastName}`;
+            document.getElementById('viewCustomerName').textContent = fullName;
             document.getElementById('viewCustomerBody').innerHTML = `
                 <div class="detail-card">
                     <h3 class="detail-card-title">Personal Information</h3>
                     <div class="detail-row">
                         <span class="detail-label">Full Name:</span>
-                        <span class="detail-value">${customer.firstName} ${customer.middleInitial || ''} ${customer.lastName}</span>
+                        <span class="detail-value">${fullName}</span>
                     </div>
-                    ${customer.companyName ? `
-                    <div class="detail-row">
-                        <span class="detail-label">Company:</span>
-                        <span class="detail-value">${customer.companyName}</span>
-                    </div>
-                    ` : ''}
                     <div class="detail-row">
                         <span class="detail-label">Customer Type:</span>
-                        <span class="detail-value">${customerType ? customerType.description : 'Unknown'}</span>
+                        <span class="detail-value">${customer.type}</span>
                     </div>
                     <div class="detail-row">
                         <span class="detail-label">Status:</span>
-                        <span class="status-badge ${customer.statusId === 1 ? 'status-ready' : 'status-pending'}">${customerStatus}</span>
+                        <span class="status-badge ${customer.status === 'Active' ? 'status-ready' : 'status-pending'}">${customer.status}</span>
                     </div>
                     <div class="detail-row">
-                        <span class="detail-label">Preferred:</span>
-                        <span class="detail-value">${customer.isPreferred === 'Y' ? '⭐ Yes' : 'No'}</span>
+                        <span class="detail-label">Total Orders:</span>
+                        <span class="detail-value">${customerOrders.length}</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Lifetime Value:</span>
+                        <span class="detail-value">$${customer.lifetimeValue.toFixed(2)}</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Last Order:</span>
+                        <span class="detail-value">${customer.lastOrderDate ? new Date(customer.lastOrderDate).toLocaleDateString() : 'Never'}</span>
                     </div>
                 </div>
                 
@@ -766,50 +791,12 @@
                         <span class="detail-value">${customer.email || 'N/A'}</span>
                     </div>
                     <div class="detail-row">
-                        <span class="detail-label">Mobile Phone:</span>
-                        <span class="detail-value">${customer.mobilePhone}</span>
-                    </div>
-                    ${customer.workPhone ? `
-                    <div class="detail-row">
-                        <span class="detail-label">Work Phone:</span>
-                        <span class="detail-value">${customer.workPhone}</span>
-                    </div>
-                    ` : ''}
-                    ${customer.homePhone ? `
-                    <div class="detail-row">
-                        <span class="detail-label">Home Phone:</span>
-                        <span class="detail-value">${customer.homePhone}</span>
-                    </div>
-                    ` : ''}
-                </div>
-                
-                <div class="detail-card">
-                    <h3 class="detail-card-title">Address</h3>
-                    <div class="detail-row">
-                        <span class="detail-label">Street:</span>
-                        <span class="detail-value">${customer.addressLine1 || 'N/A'}</span>
-                    </div>
-                    ${customer.addressLine2 ? `
-                    <div class="detail-row">
-                        <span class="detail-label">Line 2:</span>
-                        <span class="detail-value">${customer.addressLine2}</span>
-                    </div>
-                    ` : ''}
-                    <div class="detail-row">
-                        <span class="detail-label">Zip Code:</span>
-                        <span class="detail-value">${customer.zipCode || 'N/A'}</span>
-                    </div>
-                </div>
-                
-                <div class="detail-card">
-                    <h3 class="detail-card-title">Order History</h3>
-                    <div class="detail-row">
-                        <span class="detail-label">Total Orders:</span>
-                        <span class="detail-value balance-due">${customerOrders.length}</span>
+                        <span class="detail-label">Phone:</span>
+                        <span class="detail-value">${customer.phone}</span>
                     </div>
                     <div class="detail-row">
-                        <span class="detail-label">Total Spent:</span>
-                        <span class="detail-value">$${customerOrders.reduce((sum, o) => sum + o.totalPrice, 0).toFixed(2)}</span>
+                        <span class="detail-label">Address:</span>
+                        <span class="detail-value">${fullAddress}</span>
                     </div>
                 </div>
             `;
@@ -924,32 +911,38 @@
             if (!customer) return;
             
             currentCustomerId = customerId;
-            const customerName = customer.companyName || `${customer.firstName} ${customer.lastName}`;
+            const customerName = unifiedMockData.getCustomerName(customerId);
             document.getElementById('inactiveCustomerName').textContent = customerName;
             openModal('inactiveCustomerModal');
         }
 
         function confirmMarkCustomerInactive() {
-            const success = unifiedMockData.updateCustomer(currentCustomerId, { statusId: 2 });
+            const customer = unifiedMockData.customers.find(c => c.id === currentCustomerId);
             
-            if (success) {
+            if (customer) {
+                // Update customer status to Inactive
+                customer.status = 'Inactive';
+                
                 closeModal('inactiveCustomerModal');
+                
                 // Refresh the customers display
                 allCustomers = unifiedMockData.customers.map(customer => {
                     const customerOrders = unifiedMockData.orders.filter(o => o.customerId === customer.id);
-                    const customerType = unifiedMockData.customerTypes.find(t => t.id === customer.typeId);
+                    const fullName = unifiedMockData.getCustomerName(customer.id);
+                    const fullAddress = `${customer.address}, ${customer.city}, ${customer.state} ${customer.zip}`;
                     
                     return {
                         id: customer.id,
-                        name: customer.companyName || `${customer.firstName} ${customer.lastName}`,
+                        name: fullName,
                         email: customer.email,
-                        phone: customer.phone || customer.mobilePhone,
-                        address: customer.addressLine1 + (customer.addressLine2 ? `, ${customer.addressLine2}` : ''),
-                        joinDate: customerOrders.length > 0 ? customerOrders.sort((a, b) => new Date(a.orderDate) - new Date(b.orderDate))[0].orderDate : '2025-01-01',
+                        phone: customer.phone,
+                        address: fullAddress,
+                        joinDate: customer.lastOrderDate || '2025-01-01',
                         orders: customerOrders.length,
-                        type: customer.isPreferred === 'Y' ? 'repeat' : 'new',
-                        customerType: customerType ? customerType.description : 'Unknown',
-                        customerTypeShort: customer.typeId === 2 ? 'Corporate' : 'Retail'
+                        type: customer.status === 'Active' ? 'active' : 'inactive',
+                        customerType: customer.type,
+                        customerTypeShort: customer.type,
+                        lifetimeValue: customer.lifetimeValue
                     };
                 });
                 filteredCustomers = [...allCustomers];

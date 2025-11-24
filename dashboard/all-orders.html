@@ -655,8 +655,13 @@
     <script src="js/main.js"></script>
     <script src="js/unified-mock-data.js"></script>
     <script>
-        // Load all orders from unified mock data
-        let allOrders = unifiedMockData.orders.map(order => {
+        // Get today's date for daily filtering
+        const TODAY = '2025-11-23';
+        
+        // Load all orders from unified mock data - DAILY LOGIC: Show only today's orders
+        let allOrders = unifiedMockData.orders
+            .filter(order => order.orderDate === TODAY)
+            .map(order => {
             const customer = unifiedMockData.customers.find(c => c.id === order.customerId);
             const product = unifiedMockData.products.find(p => p.id === order.productId);
             const status = unifiedMockData.orderStatuses.find(s => s.id === order.statusId);
@@ -670,13 +675,13 @@
             
             return {
                 id: order.id,
-                customer: customer ? (customer.companyName || `${customer.firstName} ${customer.lastName}`) : 'Unknown',
-                phone: customer ? (customer.phone || customer.mobilePhone) : '',
+                customer: unifiedMockData.getCustomerName(order.customerId),
+                phone: customer ? customer.phone : '',
                 date: order.orderDate,
                 pickupDate: order.pickupDate,
                 amount: order.totalPrice,
                 status: statusText,
-                statusDescription: status ? status.description : 'Unknown',
+                statusDescription: status ? status.name : 'Unknown',
                 cake: product ? product.name : 'Unknown Product',
                 notes: order.notes || ''
             };
@@ -787,7 +792,7 @@
                     <h3 class="detail-card-title">Customer Information</h3>
                     <div class="detail-row">
                         <span class="detail-label">Name:</span>
-                        <span class="detail-value">${customer.firstName} ${customer.lastName}</span>
+                        <span class="detail-value">${unifiedMockData.getCustomerName(order.customerId)}</span>
                     </div>
                     <div class="detail-row">
                         <span class="detail-label">Email:</span>
@@ -795,7 +800,7 @@
                     </div>
                     <div class="detail-row">
                         <span class="detail-label">Phone:</span>
-                        <span class="detail-value">${customer.mobilePhone}</span>
+                        <span class="detail-value">${customer.phone}</span>
                     </div>
                 </div>
                 
@@ -875,7 +880,7 @@
             const customerSelect = document.getElementById('editCustomerId');
             customerSelect.innerHTML = unifiedMockData.customers
                 .map(c => `<option value="${c.id}" ${c.id === order.customerId ? 'selected' : ''}>
-                    ${c.firstName} ${c.lastName}${c.companyName ? ' (' + c.companyName + ')' : ''}
+                    ${unifiedMockData.getCustomerName(c.id)}${c.type === 'Corporate' ? ' (Corporate)' : ''}
                 </option>`)
                 .join('');
             
@@ -991,8 +996,8 @@
                     
                     return {
                         id: order.id,
-                        customer: customer ? (customer.companyName || `${customer.firstName} ${customer.lastName}`) : 'Unknown',
-                        phone: customer ? (customer.phone || customer.mobilePhone) : '',
+                        customer: unifiedMockData.getCustomerName(order.customerId),
+                        phone: customer ? customer.phone : '',
                         date: order.orderDate,
                         pickupDate: order.pickupDate,
                         amount: order.totalPrice,

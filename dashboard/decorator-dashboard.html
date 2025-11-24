@@ -266,7 +266,7 @@
             <!-- QUICK ACTIONS -->
             <div class="quick-actions-bar">
                 <a href="../order-form-wizard.html" class="action-btn primary">Create New Order</a>
-                <a href="all-orders.html" class="action-btn">View Decorating Queue</a>
+                <a href="all-orders.html" class="action-btn">View Orders</a>
                 <a href="view-products.html" class="action-btn">View Products</a>
                 <a href="reports.html" class="action-btn">Reports</a>
             </div>
@@ -349,6 +349,13 @@
         });
 
         function initializeDecoratorDashboard() {
+            // Verify data is loaded
+            if (typeof unifiedMockData === 'undefined') {
+                console.error('❌ ERROR: unified-mock-data.js not loaded!');
+                return;
+            }
+            console.log('✅ Mock data loaded:', unifiedMockData.orders.length, 'orders,', unifiedMockData.customers.length, 'customers');
+            
             localStorage.setItem('staffRole', 'decorator');
             
             // ═══════════════════════════════════════════════════════
@@ -360,25 +367,27 @@
             // Calculate KPIs - only for orders PLACED today (orderDate)
             const todaysOrders = unifiedMockData.orders.filter(o => 
                 o.orderDate === TODAY && 
-                o.isCancelled === 'N'
+                o.statusId !== 6  // Exclude cancelled
             );
             
-            // KPI 1: Awaiting Decoration (Status 2, orderDate today)
+            // KPI 1: Awaiting Decoration (In Baking - Status 2)
             const ordersToDecorate = todaysOrders.filter(o => o.statusId === 2).length;
             
-            // KPI 2: In Decoration (Status 3, orderDate today)
+            // KPI 2: In Decoration (Status 3)
             const inDecorating = todaysOrders.filter(o => o.statusId === 3).length;
             
-            // KPI 3: Completed Today (Status >= 4, orderDate today)
-            const completedToday = todaysOrders.filter(o => o.statusId >= 4).length;
+            // KPI 3: Ready for Approval (Status 4 - Ready for Pickup)
+            const completedToday = todaysOrders.filter(o => o.statusId === 4).length;
             
-            // KPI 4: Total Today
-            const totalToday = todaysOrders.length;
+            // KPI 4: Cancelled Today
+            const cancelledToday = unifiedMockData.orders.filter(o => 
+                o.orderDate === TODAY && o.statusId === 6
+            ).length;
             
             document.getElementById('orders-to-decorate').textContent = ordersToDecorate;
             document.getElementById('in-decorating').textContent = inDecorating;
             document.getElementById('ready-approval').textContent = completedToday;
-            document.getElementById('cancelled-today').textContent = totalToday;
+            document.getElementById('cancelled-today').textContent = cancelledToday;
             
             populateDecoratingQueue();
             populateReadyForApproval();
@@ -472,7 +481,7 @@
 
         function populateCancelledOrders() {
             const TODAY = '2025-11-23'; // Demo date
-            const cancelledOrders = unifiedMockData.orders.filter(o => o.isCancelled === 'Y' && (o.pickupDate === TODAY || o.orderDate === TODAY));
+            const cancelledOrders = unifiedMockData.orders.filter(o => o.statusId === 6 && o.orderDate === TODAY);
             const tbody = document.getElementById('cancelled-tbody');
             
             if (!tbody) return; // Exit if table doesn't exist

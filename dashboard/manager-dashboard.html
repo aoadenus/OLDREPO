@@ -446,8 +446,13 @@
     });
 
     function initializeManagerDashboard() {
+        // Verify data is loaded
+        if (typeof unifiedMockData === 'undefined') {
+            console.error('❌ ERROR: unified-mock-data.js not loaded!');
+            return;
+        }
+        console.log('✅ Mock data loaded:', unifiedMockData.orders.length, 'orders,', unifiedMockData.customers.length, 'customers');
         console.log('Initializing Manager Dashboard...');
-        console.log('Unified Mock Data:', unifiedMockData);
         
         // Set manager role
         localStorage.setItem('staffRole', 'manager');
@@ -568,7 +573,15 @@
         }
         
         const today = '2025-11-23'; // Demo date
-        const pickups = unifiedMockData.getUpcomingPickups(today);
+        const pickups = unifiedMockData.orders
+            .filter(o => o.pickupDate === today && o.statusId !== 6)
+            .sort((a, b) => a.pickupTime.localeCompare(b.pickupTime))
+            .map(order => ({
+                ...order,
+                customer: unifiedMockData.getCustomerName(order.customerId),
+                product: unifiedMockData.getProductName(order.productId),
+                status: unifiedMockData.getStatusDescription(order.statusId)
+            }));
         
         if (pickups.length === 0) {
             tbody.innerHTML = '<tr><td colspan="4" style="text-align: center; padding: 20px;">No pickups scheduled for today</td></tr>';
@@ -577,10 +590,10 @@
         
         tbody.innerHTML = pickups.map(pickup => `
             <tr>
-                <td><strong>${pickup.time}</strong></td>
+                <td><strong>${pickup.pickupTime.substring(0, 5)}</strong></td>
                 <td>${pickup.customer}</td>
                 <td>${pickup.product}</td>
-                <td><span class="status-badge status-ready">Ready</span></td>
+                <td><span class="status-badge ${getStatusClass(pickup.statusId)}">${pickup.status}</span></td>
             </tr>
         `).join('');
     }
